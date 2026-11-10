@@ -139,7 +139,7 @@ class ReviewManager private constructor(context: Context) {
         ReviewLogger.logPlayStoreRedirect()
 
         // Open Source: Use GitHub releases page (no Play Store)
-        val githubUri = Uri.parse("https://github.com/Karna14314/pdf-toolkit/releases")
+        val githubUri = Uri.parse("https://github.com/Kiphra/K-PDF/releases")
         val githubIntent = Intent(Intent.ACTION_VIEW, githubUri).apply {
             addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         }

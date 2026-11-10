@@ -13,7 +13,7 @@ import android.util.Log
 object ReviewHelper {
 
     private const val TAG = "ReviewHelper"
-    private const val GITHUB_URL = "https://github.com/Karna14314/pdf-toolkit"
+    private const val GITHUB_URL = "https://github.com/Kiphra/K-PDF"
 
     /**
      * Trigger the review flow (Custom Dialog for F-Droid).
@@ -23,8 +23,8 @@ object ReviewHelper {
     fun showReview(activity: Activity) {
         try {
             val builder = AlertDialog.Builder(activity)
-            builder.setTitle("Enjoying PDF Toolkit?")
-            builder.setMessage("If you like this app, please consider starring us on GitHub or sharing it with friends. Your support helps us keep it free and open source!")
+            builder.setTitle("Enjoying K-PDF?")
+            builder.setMessage("If you like this app, please consider starring us on GitHub or sharing it with friends. Your support helps us keep it free and maintained!")
 
             builder.setPositiveButton("Star on GitHub") { dialog, _ ->
                 openUrl(activity, GITHUB_URL)

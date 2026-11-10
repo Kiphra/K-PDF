@@ -884,6 +884,36 @@ fun SettingsScreen(
                             )
                         }
                     }
+
+                    // Pillar 4: Advertising & SDK Isolation
+                    Card(
+                        shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(0.75.dp, JutDarkBorderColor),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Advertising & Third-Party SDKs", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                "To support development, non-intrusive ads may be served by trusted partners (e.g. Google AdMob). Ad networks never have access to your PDF documents, files, camera, or OCR text.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = "Published by Kiphra • Support: kiphraofficial@gmail.com",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
                 }
             },
             confirmButton = {

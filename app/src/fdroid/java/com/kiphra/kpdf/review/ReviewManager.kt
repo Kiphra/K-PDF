@@ -141,7 +141,7 @@ class ReviewManager private constructor(context: Context) {
         val packageName = appContext.packageName
 
         // F-Droid: Use GitHub releases page (no Play Store)
-        val webUri = Uri.parse("https://github.com/Karna14314/pdf-toolkit/releases")
+        val webUri = Uri.parse("https://github.com/Kiphra/K-PDF/releases")
         val webIntent = Intent(Intent.ACTION_VIEW, webUri).apply {
             addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         }
