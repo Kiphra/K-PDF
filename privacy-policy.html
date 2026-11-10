@@ -3,122 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - PDF Toolkit</title>
+    <title>Privacy Policy - K-PDF: PDF Editor & Tools</title>
+    <meta name="description" content="Official Privacy Policy for K-PDF: PDF Editor & Tools by Kiphra. Learn how your document data is protected on-device.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0D0E12;
+            --surface: #15171E;
+            --surface-elevated: #1C1E26;
+            --border: #262732;
+            --border-subtle: #1E202A;
+            --crimson: #E53935;
+            --crimson-soft: rgba(229, 57, 53, 0.12);
+            --crimson-border: rgba(229, 57, 53, 0.35);
+            --text-primary: #F3F4F6;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --accent-green: #10B981;
+            --accent-green-bg: rgba(16, 185, 129, 0.12);
+            --accent-green-border: rgba(16, 185, 129, 0.35);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.65;
+            padding: 2rem 1.25rem 5rem;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 840px;
             margin: 0 auto;
-            padding: 20px;
-            color: #333;
         }
+
+        /* Header */
+        header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--crimson-soft);
+            border: 1px solid var(--crimson-border);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--crimson);
+            margin-bottom: 1.25rem;
+        }
+
+        .brand-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--crimson);
+        }
+
         h1 {
-            color: #d32f2f;
-            border-bottom: 3px solid #d32f2f;
-            padding-bottom: 10px;
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            color: #FFFFFF;
+            margin-bottom: 0.75rem;
         }
+
+        .meta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .meta-bar span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-bar strong {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Highlights / Key Pillars */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0 2.5rem;
+        }
+
+        .pillar-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--crimson-border);
+        }
+
+        .pillar-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--crimson-soft);
+            border: 1px solid var(--crimson-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--crimson);
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.85rem;
+        }
+
+        .pillar-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.35rem;
+        }
+
+        .pillar-desc {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Content Sections */
+        section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
         h2 {
-            color: #d32f2f;
-            margin-top: 30px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.01em;
         }
-        .last-updated {
-            color: #666;
-            font-style: italic;
-            margin-bottom: 30px;
+
+        h2 .section-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 7px;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--crimson);
         }
-        .highlight {
-            background-color: #fff3cd;
-            padding: 15px;
-            border-left: 4px solid #ffc107;
-            margin: 20px 0;
+
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #E5E7EB;
+            margin: 1.25rem 0 0.5rem;
         }
+
+        p {
+            font-size: 0.925rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.85rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
         ul {
-            padding-left: 25px;
+            list-style: none;
+            margin: 0.75rem 0;
+            padding: 0;
         }
+
         li {
-            margin: 10px 0;
+            position: relative;
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        li::before {
+            content: "•";
+            position: absolute;
+            left: 0.35rem;
+            top: 0;
+            color: var(--crimson);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .badge-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--accent-green-bg);
+            border: 1px solid var(--accent-green-border);
+            color: var(--accent-green);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .contact-box {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .contact-link {
+            color: var(--crimson);
+            text-decoration: none;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 3.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        footer a:hover {
+            color: var(--crimson);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1.25rem 0.85rem 3rem;
+            }
+            h1 {
+                font-size: 1.75rem;
+            }
+            section {
+                padding: 1.25rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p class="last-updated">Last Updated: January 4, 2026</p>
+    <div class="container">
+        <header>
+            <div class="brand-badge">
+                <span class="dot"></span>
+                Kiphra • Official Policy
+            </div>
+            <h1>Privacy Policy</h1>
+            <div class="meta-bar">
+                <span>Application: <strong>K-PDF: PDF Editor & Tools</strong></span>
+                <span>Developer: <strong>Kiphra</strong></span>
+                <span>Last Updated: <strong>November 11, 2026</strong></span>
+            </div>
+        </header>
 
-    <div class="highlight">
-        <strong>TL;DR:</strong> PDF Toolkit is a completely offline app. We don't collect, store, or transmit any of your data. Your files never leave your device.
+        <!-- Highlights / Key Pillars -->
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <div class="pillar-icon">🔒</div>
+                <div class="pillar-title">100% On-Device Processing</div>
+                <div class="pillar-desc">All PDF edits, compression, OCR scanning, and conversions run locally on your hardware. Your documents never touch our or any remote servers.</div>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">🛡️</div>
+                <div class="pillar-title">Document Confidentiality</div>
+                <div class="pillar-desc">We never inspect, harvest, analyze, or share your document contents, personal files, or metadata. What you view stays strictly private.</div>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">⚡</div>
+                <div class="pillar-title">Google Play Compliant</div>
+                <div class="pillar-desc">Designed in full compliance with Google Play Store User Data policies, GDPR, and California Consumer Privacy Act (CCPA) standards.</div>
+            </div>
+        </div>
+
+        <!-- Section 1 -->
+        <section id="introduction">
+            <h2><span class="section-num">01</span> Introduction & Overview</h2>
+            <p>This Privacy Policy applies to the <strong>K-PDF: PDF Editor & Tools</strong> mobile application (hereinafter referred to as "K-PDF", "the App", or "we"), developed and published by <strong>Kiphra</strong>.</p>
+            <p>We respect your privacy and are committed to protecting your sensitive data. K-PDF is built from the ground up on an <strong>offline-first, on-device architecture</strong>. This policy details how our application interacts with your device and handles data.</p>
+        </section>
+
+        <!-- Section 2 -->
+        <section id="document-processing">
+            <h2><span class="section-num">02</span> Document Processing & Storage</h2>
+            <p><span class="badge-verified">ZERO CLOUD STORAGE</span> &nbsp; <span class="badge-verified">LOCAL EXECUTION</span></p>
+            <p style="margin-top: 0.75rem;">Your documents and PDFs are among the most sensitive files you own. K-PDF operates under the following strict guarantees:</p>
+            <ul>
+                <li><strong>Local Document Engine:</strong> All PDF manipulations (merging, splitting, compressing, watermarking, signing, form filling, OCR text extraction, and image conversions) execute entirely within the local sandbox of your Android device.</li>
+                <li><strong>No Remote Uploads:</strong> The App never uploads, transmits, or mirrors your PDF files or images to external servers or third-party cloud storage.</li>
+                <li><strong>Temporary Cache Cleanup:</strong> Any temporary cache files created while rendering previews or compressing documents are stored strictly within the app's local private cache directory and can be purged at any time from the app settings.</li>
+                <li><strong>Local History:</strong> Recent file references displayed in the Files tab are stored locally on your device's private SQLite database. You can clear this history anytime.</li>
+            </ul>
+        </section>
+
+        <!-- Section 3 -->
+        <section id="permissions">
+            <h2><span class="section-num">03</span> Device Permissions</h2>
+            <p>K-PDF requests only the minimal permissions necessary to provide its core PDF manipulation capabilities:</p>
+            <ul>
+                <li><strong>Storage / Media Files:</strong> Required to allow you to select documents from your device and to save newly generated PDFs to your local storage or Downloads folder. Access is restricted strictly to files you choose.</li>
+                <li><strong>Camera (Optional):</strong> Required solely if you utilize the "Scan to PDF" tool. Captured images are processed entirely on-device and are never uploaded or transmitted.</li>
+                <li><strong>Internet Access:</strong> Used for optional network features such as checking for updates, rendering third-party advertisements, or viewing legal web pages. Document files never utilize this connection.</li>
+            </ul>
+        </section>
+
+        <!-- Section 4 -->
+        <section id="advertising-telemetry">
+            <h2><span class="section-num">04</span> Advertising & Third-Party SDKs</h2>
+            <p>To support ongoing development and offer core PDF utilities for free, K-PDF may display non-intrusive advertisements served by trusted third-party advertising partners (such as <strong>Google AdMob</strong>):</p>
+            <ul>
+                <li><strong>Advertising Identifiers:</strong> Third-party ad networks may process standard device identifiers (e.g., Google Advertising ID), coarse location, or general device metrics solely to serve and measure ads in compliance with the Google Play Developer Program Policies.</li>
+                <li><strong>Document Data Isolation:</strong> Under no circumstance do advertising SDKs have access to your PDF documents, file names, file contents, camera feed, or extracted OCR text.</li>
+                <li><strong>Ad Personalization Controls:</strong> You can reset or opt out of personalized advertising at any time directly through your Android device settings (<em>Settings &rarr; Google &rarr; Ads &rarr; Delete advertising ID</em>).</li>
+            </ul>
+        </section>
+
+        <!-- Section 5 -->
+        <section id="third-party-notices">
+            <h2><span class="section-num">05</span> Third-Party Open Source Software</h2>
+            <p>K-PDF utilizes trusted third-party software components and libraries under their respective open-source licenses (such as Apache 2.0, MIT, and BSD), including <em>PdfBox-Android</em>, <em>Google ML Kit</em>, <em>Glide</em>, <em>uCrop</em>, and <em>Jetpack Compose</em>.</p>
+            <p>These components run locally on your device and are used solely for UI rendering, image cropping, and PDF manipulation. Full legal attributions and license texts can be inspected inside the App under <strong>Settings &rarr; Third-Party Notices</strong> or on our <a href="licenses.html" class="contact-link">Third-Party Notices page</a>.</p>
+        </section>
+
+        <!-- Section 6 -->
+        <section id="children">
+            <h2><span class="section-num">06</span> Children's Privacy (COPPA)</h2>
+            <p>K-PDF is designed as a general-purpose productivity utility and does not knowingly collect personal data from children under the age of 13. If you believe any data has inadvertently been collected, please contact us immediately for prompt deletion.</p>
+        </section>
+
+        <!-- Section 7 -->
+        <section id="user-rights">
+            <h2><span class="section-num">07</span> User Rights & Data Deletion</h2>
+            <p>In accordance with GDPR (General Data Protection Regulation), CCPA (California Consumer Privacy Act), and global privacy frameworks:</p>
+            <ul>
+                <li>Because your files reside strictly on your device, you have immediate, unilateral control over all your data.</li>
+                <li>You can delete all local data, cached PDFs, and recent history at any time by clearing the App's storage in Android Settings or using the in-app "Clear Cache" button.</li>
+                <li>Uninstalling the App permanently removes all application-private caches and settings.</li>
+            </ul>
+        </section>
+
+        <!-- Section 8 -->
+        <section id="contact">
+            <h2><span class="section-num">08</span> Contact & Developer Inquiries</h2>
+            <p>If you have questions, feedback, or concerns regarding this Privacy Policy or your data, please contact the developer directly:</p>
+            <div class="contact-box">
+                <p><strong>Entity:</strong> Kiphra</p>
+                <p><strong>Support Email:</strong> <a href="mailto:kiphraofficial@gmail.com" class="contact-link">kiphraofficial@gmail.com</a></p>
+                <p><strong>App:</strong> K-PDF: PDF Editor & Tools</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Kiphra. All rights reserved.</p>
+            <p style="margin-top: 0.5rem;"><a href="licenses.html">Third-Party Software Notices</a> &bull; <a href="#introduction">Back to Top</a></p>
+        </footer>
     </div>
-
-    <h2>1. Introduction</h2>
-    <p>PDF Toolkit ("we", "our", or "the app") is committed to protecting your privacy. This Privacy Policy explains how we handle your information when you use our mobile application.</p>
-
-    <h2>2. Data Collection</h2>
-    <p><strong>We do NOT collect any personal data.</strong> PDF Toolkit is designed to work completely offline and does not:</p>
-    <ul>
-        <li>Collect personal information (name, email, phone number, etc.)</li>
-        <li>Track your location</li>
-        <li>Access your contacts</li>
-        <li>Use analytics or tracking services</li>
-        <li>Require account creation or login</li>
-        <li>Upload your files to any server</li>
-    </ul>
-
-    <h2>3. How Your Files Are Processed</h2>
-    <p>All PDF and image processing happens <strong>locally on your device</strong>:</p>
-    <ul>
-        <li>Files are processed using on-device libraries (PdfBox-Android, ML Kit)</li>
-        <li>Temporary files are stored in your device's cache and automatically cleaned up</li>
-        <li>Output files are saved to your device's storage (Downloads or custom location)</li>
-        <li>No files are ever transmitted over the internet</li>
-    </ul>
-
-    <h2>4. Permissions</h2>
-    <p>The app requests the following permissions:</p>
-    <ul>
-        <li><strong>Storage Access:</strong> To read PDF/image files and save processed files</li>
-        <li><strong>Camera (Optional):</strong> For the "Scan to PDF" feature only</li>
-    </ul>
-    <p>These permissions are used solely for the app's core functionality and never for data collection.</p>
-
-    <h2>5. Third-Party Services</h2>
-    <p>PDF Toolkit does NOT use any third-party services, including:</p>
-    <ul>
-        <li>No advertising networks</li>
-        <li>No analytics platforms (Google Analytics, Firebase Analytics, etc.)</li>
-        <li>No crash reporting services</li>
-        <li>No cloud storage services</li>
-    </ul>
-
-    <h2>6. Data Storage</h2>
-    <p>The app stores the following data locally on your device:</p>
-    <ul>
-        <li><strong>Recent Files List:</strong> URI references to files you've opened (for quick access)</li>
-        <li><strong>App Settings:</strong> Your preferences (compression quality, default format, etc.)</li>
-        <li><strong>Temporary Cache:</strong> Temporary files created during processing (automatically cleaned)</li>
-    </ul>
-    <p>You can clear this data at any time through the app's Settings or by clearing the app's data in your device settings.</p>
-
-    <h2>7. Children's Privacy</h2>
-    <p>PDF Toolkit does not collect any data from anyone, including children under 13. The app is safe for all ages.</p>
-
-    <h2>8. Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated "Last Updated" date.</p>
-
-    <h2>9. Contact Us</h2>
-    <p>If you have questions about this Privacy Policy, please contact us at:</p>
-    <p><strong>Email:</strong> kiphraofficial@gmail.com</p>
-
-    <h2>10. Your Rights</h2>
-    <p>Since we don't collect any data, there's no data to access, modify, or delete. However, you can:</p>
-    <ul>
-        <li>Clear recent files history in the app's Files tab</li>
-        <li>Clear cache in the app's Settings</li>
-        <li>Uninstall the app to remove all local data</li>
-    </ul>
-
-    <hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;">
-    <p style="text-align: center; color: #666; font-size: 14px;">
-        © 2026 PDF Toolkit. All rights reserved.
-    </p>
 </body>
 </html>
