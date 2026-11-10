@@ -10,6 +10,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,9 +42,7 @@ import com.kiphra.kpdf.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kiphra.kpdf.ui.theme.JutCrimsonPrimary
-import com.kiphra.kpdf.ui.theme.JutDarkBorderColor
-import com.kiphra.kpdf.ui.theme.JutDarkTextMuted
+import com.kiphra.kpdf.ui.theme.*
 import androidx.core.content.FileProvider
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -380,7 +379,7 @@ fun AppNavigation(
     
     // Track current route
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route ?: actualStartDestination
     
     // Bottom bar is shown only on main tabs
     val showBottomBar = currentRoute in listOf(
@@ -927,11 +926,16 @@ private fun BottomNavigationBar(
     navController: NavHostController,
     currentRoute: String?
 ) {
+    val isDark = isSystemInDarkTheme()
+    val borderColor = if (isDark) JutDarkBorderColor else JutLightBorderColor
+    val activePillColor = if (isDark) Color(0xFF2E1517) else Color(0xFFFFEBEE)
+    val unselectedColor = if (isDark) JutDarkTextMuted else JutLightTextMuted
+
     Surface(
         color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.drawBehind {
             drawLine(
-                color = JutDarkBorderColor.copy(alpha = 0.5f),
+                color = borderColor.copy(alpha = 0.5f),
                 start = Offset(0f, 0f),
                 end = Offset(size.width, 0f),
                 strokeWidth = 1f
@@ -970,11 +974,11 @@ private fun BottomNavigationBar(
                     },
                     selected = selected,
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                        selectedTextColor = MaterialTheme.colorScheme.primary,
-                        indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                        unselectedIconColor = JutDarkTextMuted,
-                        unselectedTextColor = JutDarkTextMuted
+                        selectedIconColor = JutCrimsonPrimary,
+                        selectedTextColor = JutCrimsonPrimary,
+                        indicatorColor = activePillColor,
+                        unselectedIconColor = unselectedColor,
+                        unselectedTextColor = unselectedColor
                     ),
                     onClick = {
                         val targetRoute = when (tab) {
