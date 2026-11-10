@@ -1,1 +1,1 @@
-PDF Toolkit
+K-PDF: PDF Editor & Tools
