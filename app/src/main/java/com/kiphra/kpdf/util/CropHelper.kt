@@ -77,9 +77,9 @@ object CropHelper {
             // Step 3: Configure uCrop options
             val options = UCrop.Options().apply {
                 // Use K-PDF Kiphra brand theme colors
-                setToolbarColor(Color.parseColor("#1A73E8"))
-                setStatusBarColor(Color.parseColor("#1765CC"))
-                setActiveControlsWidgetColor(Color.parseColor("#1A73E8"))
+                setToolbarColor(Color.parseColor("#15171E"))
+                setStatusBarColor(Color.parseColor("#0D0E12"))
+                setActiveControlsWidgetColor(Color.parseColor("#E53935"))
                 setToolbarWidgetColor(Color.WHITE)
                 
                 // Compression settings

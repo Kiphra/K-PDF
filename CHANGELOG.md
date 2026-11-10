@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2026-11-11
+
+### Added
+- Complete brand evolution to **K-PDF: PDF Editor & Tools** published by **Kiphra**.
+- Engineering-grade obsidian (`#0D0E12`) and crimson (`#E53935`) dark aesthetic across all screens and components.
+- Advanced 4-point perspective warp and edge detection for Scan to PDF.
+- Print Imposition tool with Cut & Stack, N-Up, 2-Up, 4-Up, and RTL/LTR layout modes.
+- Universal mailto client handler pre-filling support diagnostics.
+- Web Privacy Policy and Third-Party Software Notices hosted at `https://kiphra.github.io/K-PDF/`.
+
+### Changed
+- Standardized application package ID to `com.kiphra.kpdf`.
+- Migrated default PDF output location to `Documents/K-PDF`.
+- Updated CI deployment workflows and store release metadata.
+
+---
+
 ## [1.3.210] - 2026-08-08
 
 ### Added

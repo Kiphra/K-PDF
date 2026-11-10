@@ -1,0 +1,9 @@
+K-PDF v1.4.0 (Build 226) Release:
+• Brand transformation to K-PDF: PDF Editor & Tools by Kiphra
+• Modern JUT obsidian and crimson dark engineering aesthetic
+• On-device OCR text recognition and offline processing
+• Scan to PDF with 4-point perspective warp and edge detection
+• Print Imposition: Booklet creation (N-Up, Cut & Stack, 2-Up, 4-Up)
+• Reusable digital signatures & customizable watermarks
+• Offline-first privacy architecture: zero files leave your device
+• Memory & stability enhancements across all 20+ PDF utilities
