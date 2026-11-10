@@ -7,13 +7,18 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PictureAsPdf
@@ -21,12 +26,21 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.kiphra.kpdf.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.kiphra.kpdf.ui.theme.JutCrimsonPrimary
+import com.kiphra.kpdf.ui.theme.JutDarkBorderColor
+import com.kiphra.kpdf.ui.theme.JutDarkTextMuted
 import androidx.core.content.FileProvider
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -397,7 +411,8 @@ fun AppNavigation(
                         IconButton(onClick = { isHistorySidebarOpen = true }) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
-                                contentDescription = stringResource(R.string.nav_open_history)
+                                contentDescription = stringResource(R.string.nav_open_history),
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
@@ -405,29 +420,60 @@ fun AppNavigation(
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // App Icon
-                            Surface(
-                                shape = MaterialTheme.shapes.small,
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                modifier = Modifier.size(36.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.PictureAsPdf,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    modifier = Modifier.padding(6.dp)
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(
-                                text = when (currentRoute) {
-                                    Screen.Tools.route -> stringResource(R.string.app_name)
-                                    Screen.Files.route -> stringResource(R.string.nav_tab_files)
-                                    else -> stringResource(R.string.app_name)
-                                },
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
+                            // High-Resolution K-PDF Orbit Logo Asset
+                            Image(
+                                painter = painterResource(id = R.drawable.app_icon),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(RoundedCornerShape(7.dp))
+                                    .border(
+                                        width = 0.75.dp,
+                                        color = JutDarkBorderColor,
+                                        shape = RoundedCornerShape(7.dp)
+                                    )
                             )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = when (currentRoute) {
+                                        Screen.Tools.route -> "K-PDF"
+                                        Screen.Files.route -> stringResource(R.string.nav_tab_files)
+                                        else -> "K-PDF"
+                                    },
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 17.sp,
+                                        letterSpacing = (-0.2).sp,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                // JUT Connect style technical status pill
+                                Box(
+                                    modifier = Modifier
+                                        .background(
+                                            color = JutCrimsonPrimary.copy(alpha = 0.12f),
+                                            shape = RoundedCornerShape(4.dp)
+                                        )
+                                        .border(
+                                            width = 0.5.dp,
+                                            color = JutCrimsonPrimary.copy(alpha = 0.3f),
+                                            shape = RoundedCornerShape(4.dp)
+                                        )
+                                        .padding(horizontal = 5.dp, vertical = 1.5.dp)
+                                ) {
+                                    Text(
+                                        text = "OFFLINE",
+                                        style = MaterialTheme.typography.labelSmall.copy(
+                                            fontSize = 8.5.sp,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            letterSpacing = 0.6.sp,
+                                            color = JutCrimsonPrimary
+                                        )
+                                    )
+                                }
+                            }
                         }
                     },
                     actions = {
@@ -438,13 +484,22 @@ fun AppNavigation(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Settings,
-                                contentDescription = stringResource(R.string.settings_title)
+                                contentDescription = stringResource(R.string.settings_title),
+                                tint = JutDarkTextMuted
                             )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surface
-                    )
+                    ),
+                    modifier = Modifier.drawBehind {
+                        drawLine(
+                            color = JutDarkBorderColor.copy(alpha = 0.6f),
+                            start = Offset(0f, size.height),
+                            end = Offset(size.width, size.height),
+                            strokeWidth = 1f
+                        )
+                    }
                 )
             }
         },
@@ -861,42 +916,74 @@ private fun BottomNavigationBar(
     navController: NavHostController,
     currentRoute: String?
 ) {
-    NavigationBar {
-        BottomNavTab.entries.forEach { tab ->
-            val selected = when (tab) {
-                BottomNavTab.TOOLS -> currentRoute == Screen.Tools.route
-                BottomNavTab.FILES -> currentRoute == Screen.Files.route
-            }
-            
-            val tabTitle = getTabTitle(tab)
-            
-            NavigationBarItem(
-                icon = { 
-                    Icon(
-                        imageVector = tab.icon,
-                        contentDescription = tabTitle
-                    )
-                },
-                label = { Text(tabTitle) },
-                selected = selected,
-                onClick = {
-                    val targetRoute = when (tab) {
-                        BottomNavTab.TOOLS -> Screen.Tools.route
-                        BottomNavTab.FILES -> Screen.Files.route
-                    }
-                    
-                    safeNavigate(navController, targetRoute) {
-                        // Pop up to start destination to avoid building up a stack
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        // Avoid multiple copies of the same destination
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
-                    }
-                }
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.drawBehind {
+            drawLine(
+                color = JutDarkBorderColor.copy(alpha = 0.5f),
+                start = Offset(0f, 0f),
+                end = Offset(size.width, 0f),
+                strokeWidth = 1f
             )
+        }
+    ) {
+        NavigationBar(
+            containerColor = Color.Transparent,
+            tonalElevation = 0.dp
+        ) {
+            BottomNavTab.entries.forEach { tab ->
+                val selected = when (tab) {
+                    BottomNavTab.TOOLS -> currentRoute == Screen.Tools.route
+                    BottomNavTab.FILES -> currentRoute == Screen.Files.route
+                }
+                
+                val tabTitle = getTabTitle(tab)
+                
+                NavigationBarItem(
+                    icon = { 
+                        Icon(
+                            imageVector = tab.icon,
+                            contentDescription = tabTitle,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    },
+                    label = { 
+                        Text(
+                            text = tabTitle,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                                fontSize = 11.sp,
+                                letterSpacing = 0.4.sp
+                            )
+                        ) 
+                    },
+                    selected = selected,
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        unselectedIconColor = JutDarkTextMuted,
+                        unselectedTextColor = JutDarkTextMuted
+                    ),
+                    onClick = {
+                        val targetRoute = when (tab) {
+                            BottomNavTab.TOOLS -> Screen.Tools.route
+                            BottomNavTab.FILES -> Screen.Files.route
+                        }
+                        
+                        safeNavigate(navController, targetRoute) {
+                            // Pop up to start destination to avoid building up a stack
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            // Avoid multiple copies of the same destination
+                            launchSingleTop = true
+                            // Restore state when reselecting a previously selected item
+                            restoreState = true
+                        }
+                    }
+                )
+            }
         }
     }
 }

@@ -11,6 +11,10 @@ import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -22,14 +26,20 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kiphra.kpdf.data.FileManager
 import com.kiphra.kpdf.data.PersistedFile
 import com.kiphra.kpdf.data.SafUriManager
+import com.kiphra.kpdf.ui.theme.JutCrimsonPrimary
+import com.kiphra.kpdf.ui.theme.JutDarkBorderColor
+import com.kiphra.kpdf.ui.theme.JutDarkTextMuted
+import com.kiphra.kpdf.ui.theme.JutSkyBlue
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -195,22 +205,17 @@ fun FilesScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Subtitle
-        Text(
-            text = "Access your recent documents",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-        
-        // Open Document Button
+        // Open Document Hero Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 14.dp, vertical = 6.dp),
+            shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.surface
             ),
+            border = BorderStroke(0.75.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             onClick = {
                 documentPickerLauncher.safeLaunch(docMimeTypes, context)
             }
@@ -218,93 +223,179 @@ fun FilesScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.FileOpen,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(32.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Open PDF Document",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Text(
-                        text = "Browse and open PDF files",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                Box(
+                    modifier = Modifier
+                        .size(38.dp)
+                        .background(
+                            color = JutCrimsonPrimary.copy(alpha = 0.08f),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .border(
+                            width = 0.75.dp,
+                            color = JutCrimsonPrimary.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FileOpen,
+                        contentDescription = null,
+                        tint = JutCrimsonPrimary,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
+                Spacer(modifier = Modifier.width(14.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Open Document",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.5.sp,
+                                letterSpacing = (-0.2).sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                        Text(
+                            text = "SAF // BROWSE",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                color = JutDarkTextMuted.copy(alpha = 0.7f),
+                                fontSize = 9.sp,
+                                letterSpacing = 0.8.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "Select any PDF or Word file from storage",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 12.sp
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = JutDarkTextMuted.copy(alpha = 0.5f),
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }
         
-        // Filter tabs
+        // Filter tabs (JUT Connect pill style)
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 14.dp, vertical = 6.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(FileFilter.entries) { filter ->
-                FilterChip(
-                    selected = selectedFilter == filter,
-                    onClick = { selectedFilter = filter },
-                    label = { Text(filter.title) },
-                    leadingIcon = {
+                val selected = selectedFilter == filter
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = if (selected) JutCrimsonPrimary else MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .border(
+                            width = 0.75.dp,
+                            color = if (selected) JutCrimsonPrimary else MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .clickable { selectedFilter = filter }
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
                         Icon(
                             imageVector = filter.icon,
                             contentDescription = null,
-                            modifier = Modifier.size(18.dp)
+                            tint = if (selected) MaterialTheme.colorScheme.onPrimary else JutDarkTextMuted,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Text(
+                            text = filter.title.uppercase(),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.8.sp,
+                                fontSize = 11.sp,
+                                color = if (selected) MaterialTheme.colorScheme.onPrimary else JutDarkTextMuted
+                            )
                         )
                     }
-                )
+                }
             }
         }
         
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         
-        // Recent Files Section Header with Clear Button
+        // Recent Files Section Header with JUT Kicker
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 14.dp, vertical = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Recent Files",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Column {
+                Text(
+                    text = "01 // RECENT DOCUMENTS",
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 10.5.sp,
+                        letterSpacing = 1.2.sp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                )
+                Text(
+                    text = "Recent Files",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        letterSpacing = (-0.2).sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                )
+            }
             
             if (recentFiles.isNotEmpty()) {
                 TextButton(
-                    onClick = { showClearHistoryDialog = true }
+                    onClick = { showClearHistoryDialog = true },
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.DeleteSweep,
                         contentDescription = stringResource(R.string.history_clear_all),
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(16.dp),
+                        tint = JutDarkTextMuted
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(stringResource(R.string.action_clear))
+                    Text(
+                        text = stringResource(R.string.action_clear).uppercase(),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.6.sp,
+                            color = JutDarkTextMuted,
+                            fontSize = 11.sp
+                        )
+                    )
                 }
             }
         }
         
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         
         if (isLoading) {
             Box(
@@ -478,12 +569,19 @@ private fun RecentFileItem(
     file: PersistedFile,
     onClick: () -> Unit
 ) {
+    val isPdf = file.mimeType == "application/pdf"
+    val badgeColor = if (isPdf) JutCrimsonPrimary else JutSkyBlue
+    val badgeText = if (isPdf) "PDF" else "DOC"
+
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(0.75.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier
@@ -491,17 +589,26 @@ private fun RecentFileItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // File type icon
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = getFileIconColor(file.mimeType),
-                modifier = Modifier.size(44.dp)
+            // File type icon in tinted JUT box
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(
+                        color = badgeColor.copy(alpha = 0.08f),
+                        shape = RoundedCornerShape(7.dp)
+                    )
+                    .border(
+                        width = 0.75.dp,
+                        color = badgeColor.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(7.dp)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = getFileIcon(file.mimeType),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.padding(10.dp)
+                    tint = badgeColor,
+                    modifier = Modifier.size(18.dp)
                 )
             }
             
@@ -510,28 +617,56 @@ private fun RecentFileItem(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = file.name.substringBeforeLast('.'),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        letterSpacing = (-0.1).sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        text = badgeText,
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = badgeColor,
+                            fontSize = 9.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.6.sp
+                        )
+                    )
+                    Text(
+                        text = "//",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.8f),
+                            fontSize = 9.sp
+                        )
+                    )
+                    Text(
                         text = FileManager.formatFileSize(file.size),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 11.sp
+                        )
                     )
                     Text(
-                        text = "•",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = "//",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.8f),
+                            fontSize = 9.sp
+                        )
                     )
                     Text(
-                        text = formatDate(file.lastAccessed),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = formatDate(file.lastAccessed).uppercase(),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 11.sp
+                        )
                     )
                 }
             }
@@ -539,7 +674,8 @@ private fun RecentFileItem(
             Icon(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = JutDarkTextMuted.copy(alpha = 0.4f),
+                modifier = Modifier.size(18.dp)
             )
         }
     }

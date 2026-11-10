@@ -2,7 +2,10 @@ package com.kiphra.kpdf.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
@@ -12,46 +15,69 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import com.kiphra.kpdf.R
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.kiphra.kpdf.R
+import com.kiphra.kpdf.ui.theme.*
 
 /**
- * Reusable top app bar for tool screens.
+ * Reusable top app bar for tool screens with JUT Connect hairline border.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToolTopBar(
     title: String,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
+    val isDark = isSystemInDarkTheme()
+    val borderColor = if (isDark) JutDarkBorderColor else JutLightBorderColor
+
     TopAppBar(
         title = {
             Text(
                 text = title,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onSurface
             )
         },
         navigationIcon = {
             IconButton(onClick = onNavigateBack) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.action_back)
+                    contentDescription = stringResource(R.string.action_back),
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         },
+        actions = actions,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface
-        )
+        ),
+        modifier = modifier.drawBehind {
+            drawLine(
+                color = borderColor,
+                start = Offset(0f, size.height),
+                end = Offset(size.width, size.height),
+                strokeWidth = 1.dp.toPx()
+            )
+        }
     )
 }
 
 /**
- * Action button used at the bottom of tool screens.
+ * Action button used at the bottom of tool screens with JUT styling.
  */
 @Composable
 fun ActionButton(
@@ -67,13 +93,19 @@ fun ActionButton(
         enabled = enabled && !isLoading,
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp),
-        shape = MaterialTheme.shapes.medium
+            .height(52.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = Color.White,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+        )
     ) {
         if (isLoading) {
             CircularProgressIndicator(
-                modifier = Modifier.size(24.dp),
-                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(22.dp),
+                color = Color.White,
                 strokeWidth = 2.dp
             )
             Spacer(modifier = Modifier.width(12.dp))
@@ -88,7 +120,8 @@ fun ActionButton(
         Text(
             text = if (isLoading) stringResource(R.string.action_processing) else text,
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 0.5.sp
         )
     }
 }
@@ -122,13 +155,15 @@ fun OperationProgress(
             progress = animatedProgress,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(8.dp),
+                .height(6.dp),
+            color = JutCrimsonPrimary,
             trackColor = MaterialTheme.colorScheme.surfaceVariant
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "${(animatedProgress * 100).toInt()}%",
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.labelMedium,
+            fontFamily = FontFamily.Monospace,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
         )
@@ -136,7 +171,7 @@ fun OperationProgress(
 }
 
 /**
- * Empty state placeholder when no files are selected.
+ * Empty state placeholder when no files are selected with tinted icon container.
  */
 @Composable
 fun EmptyState(
@@ -152,31 +187,44 @@ fun EmptyState(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)),
+            modifier = Modifier.size(72.dp)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(36.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = subtitle,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
     }
 }
 
 /**
- * Result dialog shown after operation completion.
+ * Result dialog shown after operation completion with JUT styling.
  */
 @Composable
 fun ResultDialog(
@@ -187,12 +235,19 @@ fun ResultDialog(
     onAction: (() -> Unit)? = null,
     actionText: String = "Open"
 ) {
+    val isDark = isSystemInDarkTheme()
+    val borderColor = if (isDark) JutDarkBorderColor else JutLightBorderColor
+    val cardBg = if (isDark) JutDarkCardElevated else MaterialTheme.colorScheme.surface
+    val accentColor = if (isSuccess) JutEmeraldOnline else JutCrimsonPrimary
+
     Dialog(onDismissRequest = onDismiss) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            shape = MaterialTheme.shapes.large
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(containerColor = cardBg),
+            border = BorderStroke(1.dp, borderColor)
         ) {
             Column(
                 modifier = Modifier
@@ -200,23 +255,32 @@ fun ResultDialog(
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = if (isSuccess) Icons.Default.CheckCircle else Icons.Default.Error,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = if (isSuccess) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.error
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = accentColor.copy(alpha = 0.10f),
+                    border = BorderStroke(1.dp, accentColor.copy(alpha = 0.22f)),
+                    modifier = Modifier.size(68.dp)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = if (isSuccess) Icons.Default.CheckCircle else Icons.Default.Error,
+                            contentDescription = null,
+                            modifier = Modifier.size(36.dp),
+                            tint = accentColor
+                        )
                     }
-                )
+                }
                 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(18.dp))
                 
                 Text(
                     text = title,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
                 
@@ -237,17 +301,34 @@ fun ResultDialog(
                 ) {
                     OutlinedButton(
                         onClick = onDismiss,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(48.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.dp, borderColor)
                     ) {
-                        Text(stringResource(R.string.action_close))
+                        Text(
+                            text = stringResource(R.string.action_close),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                     
                     if (onAction != null && isSuccess) {
                         Button(
                             onClick = onAction,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(48.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = Color.White
+                            )
                         ) {
-                            Text(text = actionText)
+                            Text(
+                                text = actionText,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
@@ -257,7 +338,7 @@ fun ResultDialog(
 }
 
 /**
- * File item card showing selected file information.
+ * File item card showing selected file information with JUT styling.
  */
 @Composable
 fun FileItemCard(
@@ -266,11 +347,15 @@ fun FileItemCard(
     onRemove: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
+    val borderColor = if (isDark) JutDarkBorderColor else JutLightBorderColor
+    val cardBg = if (isDark) JutDarkCardBg else JutLightCardElevated
+
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = cardBg),
+        border = BorderStroke(1.dp, borderColor)
     ) {
         Row(
             modifier = Modifier
@@ -279,8 +364,9 @@ fun FileItemCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = MaterialTheme.shapes.small,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = RoundedCornerShape(8.dp),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)),
                 modifier = Modifier.size(40.dp)
             ) {
                 Box(
@@ -290,8 +376,9 @@ fun FileItemCard(
                     Text(
                         text = stringResource(R.string.label_pdf),
                         style = MaterialTheme.typography.labelSmall,
+                        fontFamily = FontFamily.Monospace,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -302,12 +389,15 @@ fun FileItemCard(
                 Text(
                     text = fileName,
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = fileSize,
                     style = MaterialTheme.typography.bodySmall,
+                    fontFamily = FontFamily.Monospace,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }

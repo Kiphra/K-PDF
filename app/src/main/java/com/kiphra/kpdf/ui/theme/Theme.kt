@@ -35,22 +35,23 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = KiphraDarkOnSurface,
     surfaceVariant = KiphraDarkSurfaceVariant,
     onSurfaceVariant = KiphraDarkOnSurfaceVariant,
-    outline = KiphraDarkOutline
+    outline = KiphraDarkOutline,
+    outlineVariant = KiphraDarkOutlineVariant
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = KiphraBluePrimary,
-    onPrimary = KiphraBlueOnPrimary,
-    primaryContainer = KiphraBlueContainer,
-    onPrimaryContainer = KiphraOnBlueContainer,
-    secondary = KiphraSecondary,
-    onSecondary = KiphraOnSecondary,
-    secondaryContainer = KiphraSecondaryContainer,
-    onSecondaryContainer = KiphraOnSecondaryContainer,
-    tertiary = KiphraTertiary,
-    onTertiary = KiphraOnTertiary,
-    tertiaryContainer = KiphraTertiaryContainer,
-    onTertiaryContainer = KiphraOnTertiaryContainer,
+    primary = KiphraLightPrimary,
+    onPrimary = KiphraLightOnPrimary,
+    primaryContainer = KiphraLightPrimaryContainer,
+    onPrimaryContainer = KiphraLightOnPrimaryContainer,
+    secondary = KiphraLightSecondary,
+    onSecondary = KiphraLightOnSecondary,
+    secondaryContainer = KiphraLightSecondaryContainer,
+    onSecondaryContainer = KiphraLightOnSecondaryContainer,
+    tertiary = KiphraLightTertiary,
+    onTertiary = KiphraLightOnTertiary,
+    tertiaryContainer = KiphraLightTertiaryContainer,
+    onTertiaryContainer = KiphraLightOnTertiaryContainer,
     background = KiphraLightBackground,
     onBackground = KiphraLightOnBackground,
     surface = KiphraLightSurface,
@@ -63,7 +64,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun KPdfTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     // Determine the actual dark theme state based on AppCompatDelegate mode
@@ -85,8 +86,13 @@ fun KPdfTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !actualDarkTheme
+            val statusBarColor = if (actualDarkTheme) JutDarkAppBarBg else JutLightAppBarBg
+            val navBarColor = if (actualDarkTheme) JutDarkAppBarBg else JutLightAppBarBg
+            window.statusBarColor = statusBarColor.toArgb()
+            window.navigationBarColor = navBarColor.toArgb()
+            val controller = WindowCompat.getInsetsController(window, view)
+            controller.isAppearanceLightStatusBars = !actualDarkTheme
+            controller.isAppearanceLightNavigationBars = !actualDarkTheme
         }
     }
 
@@ -101,6 +107,6 @@ fun KPdfTheme(
 @Composable
 fun PDFToolkitTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) = KPdfTheme(darkTheme = darkTheme, dynamicColor = dynamicColor, content = content)

@@ -7,12 +7,15 @@ import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -20,9 +23,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.sp
+import com.kiphra.kpdf.ui.theme.JutCrimsonPrimary
+import com.kiphra.kpdf.ui.theme.JutDarkBorderColor
+import com.kiphra.kpdf.ui.theme.JutDarkTextMuted
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -148,42 +157,87 @@ fun HistorySidebar(
                 shadowElevation = 8.dp
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding()
                 ) {
-                    // Header
+                    // Header (JUT Connect Obsidian style)
                     Surface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        modifier = Modifier.fillMaxWidth()
+                        color = MaterialTheme.colorScheme.surface,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .drawBehind {
+                                drawLine(
+                                    color = JutDarkBorderColor.copy(alpha = 0.6f),
+                                    start = Offset(0f, size.height),
+                                    end = Offset(size.width, size.height),
+                                    strokeWidth = 1f
+                                )
+                            }
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(horizontal = 14.dp, vertical = 14.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.History,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = "History",
-                                    style = MaterialTheme.typography.titleLarge,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .background(
+                                            color = JutCrimsonPrimary.copy(alpha = 0.08f),
+                                            shape = RoundedCornerShape(7.dp)
+                                        )
+                                        .border(
+                                            width = 0.75.dp,
+                                            color = JutCrimsonPrimary.copy(alpha = 0.2f),
+                                            shape = RoundedCornerShape(7.dp)
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.History,
+                                        contentDescription = null,
+                                        tint = JutCrimsonPrimary,
+                                        modifier = Modifier.size(17.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Column {
+                                    Text(
+                                        text = "00 // AUDIT LOG",
+                                        style = MaterialTheme.typography.labelSmall.copy(
+                                            fontSize = 9.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            letterSpacing = 1.0.sp,
+                                            color = JutCrimsonPrimary
+                                        )
+                                    )
+                                    Text(
+                                        text = "History",
+                                        style = MaterialTheme.typography.titleMedium.copy(
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 16.sp,
+                                            letterSpacing = (-0.2).sp,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    )
+                                }
                             }
                             
-                            IconButton(onClick = onClose) {
+                            IconButton(
+                                onClick = onClose,
+                                modifier = Modifier.size(32.dp)
+                            ) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = stringResource(R.string.action_close),
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                    tint = JutDarkTextMuted,
+                                    modifier = Modifier.size(18.dp)
                                 )
                             }
                         }
@@ -402,14 +456,13 @@ private fun HistoryItem(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
         onClick = { openPdfOutput() },
         colors = CardDefaults.cardColors(
-            containerColor = when (entry.status) {
-                OperationStatus.SUCCESS -> MaterialTheme.colorScheme.surfaceVariant
-                OperationStatus.FAILED -> MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
-                OperationStatus.CANCELLED -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
-            }
-        )
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(0.75.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier
@@ -420,31 +473,39 @@ private fun HistoryItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Icon
-                Surface(
-                    shape = CircleShape,
-                    color = when (entry.status) {
-                        OperationStatus.SUCCESS -> MaterialTheme.colorScheme.primaryContainer
-                        OperationStatus.FAILED -> MaterialTheme.colorScheme.errorContainer
-                        OperationStatus.CANCELLED -> MaterialTheme.colorScheme.surfaceVariant
-                    },
-                    modifier = Modifier.size(40.dp)
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Icon(
-                            imageVector = getOperationIcon(entry.operationType),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = when (entry.status) {
-                                OperationStatus.SUCCESS -> MaterialTheme.colorScheme.onPrimaryContainer
-                                OperationStatus.FAILED -> MaterialTheme.colorScheme.onErrorContainer
-                                OperationStatus.CANCELLED -> MaterialTheme.colorScheme.onSurfaceVariant
-                            }
+                // Icon in tinted JUT Box
+                Box(
+                    modifier = Modifier
+                        .size(34.dp)
+                        .background(
+                            color = when (entry.status) {
+                                OperationStatus.SUCCESS -> JutCrimsonPrimary.copy(alpha = 0.08f)
+                                OperationStatus.FAILED -> MaterialTheme.colorScheme.error.copy(alpha = 0.12f)
+                                OperationStatus.CANCELLED -> MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)
+                            },
+                            shape = RoundedCornerShape(7.dp)
                         )
-                    }
+                        .border(
+                            width = 0.75.dp,
+                            color = when (entry.status) {
+                                OperationStatus.SUCCESS -> JutCrimsonPrimary.copy(alpha = 0.2f)
+                                OperationStatus.FAILED -> MaterialTheme.colorScheme.error.copy(alpha = 0.3f)
+                                OperationStatus.CANCELLED -> MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                            },
+                            shape = RoundedCornerShape(7.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = getOperationIcon(entry.operationType),
+                        contentDescription = null,
+                        modifier = Modifier.size(17.dp),
+                        tint = when (entry.status) {
+                            OperationStatus.SUCCESS -> JutCrimsonPrimary
+                            OperationStatus.FAILED -> MaterialTheme.colorScheme.error
+                            OperationStatus.CANCELLED -> JutDarkTextMuted
+                        }
+                    )
                 }
                 
                 Spacer(modifier = Modifier.width(12.dp))
