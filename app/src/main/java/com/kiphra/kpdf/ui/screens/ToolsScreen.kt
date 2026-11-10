@@ -516,9 +516,9 @@ private fun EngineIdentityCard() {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                TechnicalTag(text = "ZERO ADS")
+                TechnicalTag(text = "ON-DEVICE")
                 TechnicalTag(text = "TESSERACT OCR")
-                TechnicalTag(text = "UNLIMITED")
+                TechnicalTag(text = "FAST ENGINE")
             }
         }
     }

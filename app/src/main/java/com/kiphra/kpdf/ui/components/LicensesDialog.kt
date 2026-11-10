@@ -1,10 +1,11 @@
-package com.kiphra.kpdf.ui.components
+    package com.kiphra.kpdf.ui.components
 
 import androidx.compose.ui.res.stringResource
 import com.kiphra.kpdf.R
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.kiphra.kpdf.ui.theme.JutDarkBorderColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,6 +39,8 @@ fun LicensesDialog(
             modifier = Modifier
                 .fillMaxWidth(0.95f)
                 .fillMaxHeight(0.9f),
+            shape = MaterialTheme.shapes.large,
+            border = BorderStroke(0.75.dp, JutDarkBorderColor),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             )
@@ -46,15 +50,15 @@ fun LicensesDialog(
             ) {
                 // Top bar
                 TopAppBar(
-                    title = { Text(stringResource(R.string.licenses_title)) },
+                    title = { Text(stringResource(R.string.licenses_title), fontWeight = FontWeight.Bold) },
                     navigationIcon = {
                         IconButton(onClick = onDismiss) {
                             Icon(Icons.Default.Close, "Close")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
                 
@@ -119,7 +123,7 @@ fun LicensesDialog(
                     
                     ApacheLicenseText()
                     
-                    AboutSection()
+                    NoticesSection()
                 }
             }
         }
@@ -129,8 +133,9 @@ fun LicensesDialog(
 @Composable
 private fun IntroSection() {
     Card(
+        border = BorderStroke(0.75.dp, JutDarkBorderColor),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
@@ -138,15 +143,15 @@ private fun IntroSection() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "PDF Toolkit is built with open source software",
+                text = "Third-Party Software Attributions",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "We are grateful to the following projects and their contributors:",
+                text = "We gratefully acknowledge the following software libraries used in K-PDF:",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -163,6 +168,7 @@ private fun LibrarySection(
     val context = LocalContext.current
     
     Card(
+        border = BorderStroke(0.75.dp, JutDarkBorderColor),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -212,14 +218,14 @@ private fun LibrarySection(
                     imageVector = Icons.Default.OpenInBrowser,
                     contentDescription = stringResource(R.string.cd_open_link),
                     modifier = Modifier.size(14.dp),
-                    tint = MaterialTheme.colorScheme.tertiary
+                    tint = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = url,
                     style = MaterialTheme.typography.bodySmall,
                     fontFamily = FontFamily.Monospace,
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline
                 )
             }
@@ -230,6 +236,7 @@ private fun LibrarySection(
 @Composable
 private fun ApacheLicenseText() {
     Card(
+        border = BorderStroke(0.75.dp, JutDarkBorderColor),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
         )
@@ -266,66 +273,27 @@ private fun ApacheLicenseText() {
 }
 
 @Composable
-private fun AboutSection() {
-    val context = LocalContext.current
-    val sourceCodeUrl = "https://github.com/Karna14314/Pdf_Tools"
-    
+private fun NoticesSection() {
     Card(
+        border = BorderStroke(0.75.dp, JutDarkBorderColor),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(
-                text = "About PDF Toolkit",
+                text = "Legal & Third-Party Notices",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "PDF Toolkit is also open source and available under the Apache License 2.0.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
-            )
-            
-            // Clickable source code link
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        try {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sourceCodeUrl))
-                            context.startActivity(intent)
-                        } catch (e: Exception) {
-                            // Handle error silently
-                        }
-                    }
-                    .padding(vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.OpenInBrowser,
-                    contentDescription = stringResource(R.string.cd_open_link),
-                    modifier = Modifier.size(14.dp),
-                    tint = MaterialTheme.colorScheme.onTertiaryContainer
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "Source Code: $sourceCodeUrl",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontFamily = FontFamily.Monospace,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                    textDecoration = TextDecoration.Underline
-                )
-            }
-            
-            Text(
-                text = "We believe in open source software and are committed to giving back to the community.",
+                text = "K-PDF by Kiphra utilizes third-party software components under the respective licenses documented above. All trademarks, logos, and copyrights remain property of their respective owners.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

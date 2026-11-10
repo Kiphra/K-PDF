@@ -1,5 +1,7 @@
 package com.kiphra.kpdf.ui.screens
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -110,6 +113,7 @@ fun SettingsScreen(
     var showAboutDialog by remember { mutableStateOf(false) }
     var showPrivacyPolicyDialog by remember { mutableStateOf(false) }
     var showFeatureRequestDialog by remember { mutableStateOf(false) }
+    var showBugReportDialog by remember { mutableStateOf(false) }
     var showImageFormatDialog by remember { mutableStateOf(false) }
     var showLicensesDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
@@ -347,7 +351,7 @@ fun SettingsScreen(
                     subtitle = stringResource(R.string.settings_report_bug_subtitle),
                     icon = Icons.Default.BugReport,
                     onClick = {
-                        sendBugReport(context)
+                        showBugReportDialog = true
                     }
                 )
             }
@@ -371,23 +375,12 @@ fun SettingsScreen(
             item {
                 SettingsItem(
                     title = stringResource(R.string.settings_version),
-                    subtitle = "${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})",
+                    subtitle = "v${BuildConfig.VERSION_NAME} • Build ${BuildConfig.VERSION_CODE}",
                     icon = Icons.Default.Info,
                     onClick = { showAboutDialog = true }
                 )
             }
-            
-            item {
-                SettingsItem(
-                    title = stringResource(R.string.settings_privacy_policy),
-                    subtitle = stringResource(R.string.settings_privacy_policy_subtitle),
-                    icon = Icons.Default.PrivacyTip,
-                    onClick = {
-                        showPrivacyPolicyDialog = true
-                    }
-                )
-            }
-            
+
             item {
                 SettingsItem(
                     title = stringResource(R.string.settings_licenses),
@@ -395,6 +388,17 @@ fun SettingsScreen(
                     icon = Icons.Default.Description,
                     onClick = {
                         showLicensesDialog = true
+                    }
+                )
+            }
+
+            item {
+                SettingsItem(
+                    title = stringResource(R.string.settings_privacy_policy),
+                    subtitle = "Document security & privacy policy",
+                    icon = Icons.Default.Security,
+                    onClick = {
+                        showPrivacyPolicyDialog = true
                     }
                 )
             }
@@ -410,34 +414,43 @@ fun SettingsScreen(
                 ) {
                     Surface(
                         shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        modifier = Modifier.size(64.dp)
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
+                        modifier = Modifier.size(60.dp)
                     ) {
                         Icon(
                             Icons.Default.PictureAsPdf,
                             contentDescription = null,
                             modifier = Modifier
-                                .padding(16.dp)
+                                .padding(14.dp)
                                 .size(32.dp),
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = stringResource(R.string.settings_app_name),
+                        text = "K-PDF: PDF Editor & Tools",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
+                    Text(
+                        text = "v${BuildConfig.VERSION_NAME} • Offline & Private",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = stringResource(R.string.settings_made_with_love),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = stringResource(R.string.settings_copyright),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )
                 }
             }
@@ -613,48 +626,124 @@ fun SettingsScreen(
     if (showAboutDialog) {
         AlertDialog(
             onDismissRequest = { showAboutDialog = false },
-            icon = { Icon(Icons.Default.Info, contentDescription = null) },
-            title = { Text(stringResource(R.string.settings_about_title)) },
+            icon = {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                            shape = CircleShape
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+            },
+            title = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "K-PDF",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "by Kiphra • PDF Editor & Tools",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            },
             text = {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(stringResource(R.string.settings_about_description))
+                    Text(
+                        text = stringResource(R.string.settings_about_description),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                     
-                    Divider()
+                    // Version info card with hairline border
+                    Card(
+                        shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(0.75.dp, JutDarkBorderColor),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text("Version", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("v${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text("Build Code", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("${BuildConfig.VERSION_CODE}", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text("Distribution", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(
+                                    "${BuildConfig.FLAVOR.replaceFirstChar { it.uppercase() }} (${BuildConfig.BUILD_TYPE})",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text("Platform", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})", style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
                     
+                    // Features list
                     Text(
                         text = stringResource(R.string.settings_about_features),
-                        fontWeight = FontWeight.SemiBold
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    Text(stringResource(R.string.settings_about_feature_1))
-                    Text(stringResource(R.string.settings_about_feature_2))
-                    Text(stringResource(R.string.settings_about_feature_3))
-                    Text(stringResource(R.string.settings_about_feature_4))
-                    Text(stringResource(R.string.settings_about_feature_5))
                     
-                    Divider()
-                    
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(stringResource(R.string.settings_about_version), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(BuildConfig.VERSION_NAME)
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(stringResource(R.string.settings_about_build), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(BuildConfig.VERSION_CODE.toString())
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(stringResource(R.string.settings_about_made_with), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(stringResource(R.string.settings_about_kotlin_compose))
+                    listOf(
+                        "• " + stringResource(R.string.settings_about_feature_1),
+                        "• " + stringResource(R.string.settings_about_feature_2),
+                        "• " + stringResource(R.string.settings_about_feature_3),
+                        "• " + stringResource(R.string.settings_about_feature_4),
+                        "• " + stringResource(R.string.settings_about_feature_5)
+                    ).forEach { feature ->
+                        Text(
+                            text = feature,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             },
@@ -662,51 +751,139 @@ fun SettingsScreen(
                 TextButton(onClick = { showAboutDialog = false }) {
                     Text(stringResource(R.string.action_close))
                 }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        val buildInfo = "K-PDF v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE}, Flavor: ${BuildConfig.FLAVOR}, Device: ${Build.MANUFACTURER} ${Build.MODEL}, Android ${Build.VERSION.RELEASE})"
+                        copyToClipboard(context, "K-PDF Version Info", buildInfo)
+                    }
+                ) {
+                    Icon(Icons.Default.ContentCopy, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Copy Info")
+                }
             }
         )
     }
 
-    // Privacy Policy Dialog (Offline-first & comprehensive)
+    // Privacy Policy Dialog
     if (showPrivacyPolicyDialog) {
         AlertDialog(
             onDismissRequest = { showPrivacyPolicyDialog = false },
-            icon = { Icon(Icons.Default.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
-            title = { Text(stringResource(R.string.settings_privacy_policy)) },
+            icon = {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                            shape = CircleShape
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Security,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+            },
+            title = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(R.string.settings_privacy_policy),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Document Security & Privacy",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            },
             text = {
                 Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(
-                        text = "100% Offline & Private Processing",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "K-PDF processes all files strictly on your device. Your documents, photos, signatures, and OCR data are never uploaded to any cloud server or third party.",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Divider(modifier = Modifier.padding(vertical = 4.dp))
-                    Text(
-                        text = "Device Permissions",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "• Storage: Used solely to select documents and save your generated PDFs.\n• Camera: Used only when you choose the document scanner tool.",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    Divider(modifier = Modifier.padding(vertical = 4.dp))
-                    Text(
-                        text = "Zero Analytics & Tracking",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "K-PDF does not collect personal identifiers, usage telemetry, or location data. Your privacy and documents remain entirely yours.",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                    // Pillar 1: On-device
+                    Card(
+                        shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(0.75.dp, JutDarkBorderColor),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("On-Device Document Processing", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                "All PDF manipulation, conversions, OCR scanning, and digital signatures run locally on your device. Your documents are never uploaded to remote servers or stored in third-party clouds.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    // Pillar 2: Data Confidentiality
+                    Card(
+                        shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(0.75.dp, JutDarkBorderColor),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Document Confidentiality", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                "We prioritize your privacy and document safety. K-PDF does not harvest, analyze, or transmit your private document contents, files, or sensitive information.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    // Pillar 3: Permissions
+                    Card(
+                        shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(0.75.dp, JutDarkBorderColor),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Device Permissions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                "• Storage: Used only to select your files and save exported PDFs.\n• Camera: Active only when you scan documents using the camera.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 }
             },
             confirmButton = {
@@ -716,6 +893,8 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { openPrivacyPolicy(context) }) {
+                    Icon(Icons.Default.OpenInBrowser, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text("Web Version")
                 }
             }
@@ -726,9 +905,20 @@ fun SettingsScreen(
     if (showFeatureRequestDialog) {
         FeatureRequestDialog(
             onDismiss = { showFeatureRequestDialog = false },
-            onSubmit = { featureText ->
-                sendFeatureRequest(context, featureText)
+            onSendEmail = { category, text ->
+                sendFeatureRequest(context, category, text)
                 showFeatureRequestDialog = false
+            }
+        )
+    }
+
+    // Bug Report Dialog
+    if (showBugReportDialog) {
+        BugReportDialog(
+            onDismiss = { showBugReportDialog = false },
+            onSendEmail = { description ->
+                sendBugReport(context, description)
+                showBugReportDialog = false
             }
         )
     }
@@ -842,22 +1032,65 @@ private fun SettingsItem(
 @Composable
 private fun FeatureRequestDialog(
     onDismiss: () -> Unit,
-    onSubmit: (String) -> Unit
+    onSendEmail: (String, String) -> Unit
 ) {
     var featureText by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("Feature") }
+    var category by remember { mutableStateOf("New Feature") }
     var showCategoryMenu by remember { mutableStateOf(false) }
-    
+    val categories = listOf("New Feature", "PDF Tool Request", "UI/UX & Design", "Performance", "Other")
+
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { Icon(Icons.Default.Lightbulb, contentDescription = null) },
-        title = { Text(stringResource(R.string.feature_request_title)) },
+        icon = {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        shape = CircleShape
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Default.Lightbulb,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+        },
+        title = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = stringResource(R.string.feature_request_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Help us improve K-PDF",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
         text = {
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text(stringResource(R.string.feature_request_description))
-                
+                Text(
+                    text = stringResource(R.string.feature_request_description),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
                 // Category selector
                 ExposedDropdownMenuBox(
                     expanded = showCategoryMenu,
@@ -879,7 +1112,7 @@ private fun FeatureRequestDialog(
                         expanded = showCategoryMenu,
                         onDismissRequest = { showCategoryMenu = false }
                     ) {
-                        listOf("Feature", "Improvement", "UI/UX", "Other").forEach { option ->
+                        categories.forEach { option ->
                             DropdownMenuItem(
                                 text = { Text(option) },
                                 onClick = {
@@ -890,7 +1123,7 @@ private fun FeatureRequestDialog(
                         }
                     }
                 }
-                
+
                 OutlinedTextField(
                     value = featureText,
                     onValueChange = { featureText = it },
@@ -898,109 +1131,242 @@ private fun FeatureRequestDialog(
                     placeholder = { Text(stringResource(R.string.feature_request_placeholder)) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(150.dp),
-                    maxLines = 6
+                        .height(130.dp),
+                    maxLines = 5
                 )
             }
         },
         confirmButton = {
             Button(
-                onClick = { onSubmit("[$category] $featureText") },
-                enabled = featureText.isNotBlank()
+                onClick = { onSendEmail(category, featureText) },
+                enabled = featureText.isNotBlank(),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Default.Send, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.action_submit))
+                Icon(Icons.Default.Send, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Send via Email")
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(stringResource(R.string.action_cancel))
             }
         }
     )
 }
 
-// Helper functions for intents
+@Composable
+private fun BugReportDialog(
+    onDismiss: () -> Unit,
+    onSendEmail: (String) -> Unit
+) {
+    val context = LocalContext.current
+    var bugDescription by remember { mutableStateOf("") }
 
-/**
- * Developer email for support requests.
- */
-private const val DEVELOPER_EMAIL = "developerncn29@gmail.com"
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        shape = CircleShape
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Default.BugReport,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+        },
+        title = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = stringResource(R.string.settings_report_bug),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Help us fix issues & crashes",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = "Describe what happened, error message, or reproduction steps:",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-private fun sendFeatureRequest(context: Context, featureText: String) {
-    val deviceInfo = """
-        
-        ---
+                OutlinedTextField(
+                    value = bugDescription,
+                    onValueChange = { bugDescription = it },
+                    placeholder = { Text("e.g. When trying to merge 3 scanned PDFs, the app closed unexpectedly...") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(130.dp),
+                    maxLines = 5
+                )
+
+                // Diagnostics Card
+                Card(
+                    shape = RoundedCornerShape(10.dp),
+                    border = BorderStroke(0.75.dp, JutDarkBorderColor),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(10.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Device Diagnostics Included",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            IconButton(
+                                onClick = {
+                                    copyToClipboard(context, "K-PDF Diagnostics", getDiagnosticInfo())
+                                },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.ContentCopy,
+                                    contentDescription = "Copy diagnostics",
+                                    tint = JutDarkTextMuted,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                            }
+                        }
+                        Text(
+                            text = "${Build.MANUFACTURER} ${Build.MODEL} • Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})\nv${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) • ${BuildConfig.FLAVOR}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = { onSendEmail(bugDescription) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.Send, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Send Bug Report")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.action_cancel))
+            }
+        }
+    )
+}
+
+// Helper functions for intents & actions
+
+private const val DEVELOPER_EMAIL = "kiphraofficial@gmail.com"
+private const val PRIVACY_POLICY_URL = "https://karna14314.github.io/Pdf_Tools/"
+
+private fun getDiagnosticInfo(): String {
+    return """
         Device: ${Build.MANUFACTURER} ${Build.MODEL}
         Android: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})
-        App Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})
+        App Version: ${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})
+        Flavor: ${BuildConfig.FLAVOR} (${BuildConfig.BUILD_TYPE})
     """.trimIndent()
-    
-    val emailBody = "$featureText\n$deviceInfo"
-    
+}
+
+private fun copyToClipboard(context: Context, label: String, text: String) {
     try {
-        // Restrict to Gmail only
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "message/rfc822"
-            setPackage("com.google.android.gm") // Gmail package
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(DEVELOPER_EMAIL))
-            putExtra(Intent.EXTRA_SUBJECT, "[Feature Request] PDF Toolkit")
-            putExtra(Intent.EXTRA_TEXT, emailBody)
-        }
-        
-        context.startActivity(intent)
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, text)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
     } catch (e: Exception) {
-        // Gmail not installed
+        Toast.makeText(context, "Failed to copy", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private fun sendEmailUniversal(context: Context, subject: String, body: String) {
+    try {
+        val encodedSubject = Uri.encode(subject)
+        val encodedBody = Uri.encode(body)
+        val mailtoUri = Uri.parse("mailto:$DEVELOPER_EMAIL?subject=$encodedSubject&body=$encodedBody")
+        val intent = Intent(Intent.ACTION_SENDTO, mailtoUri).apply {
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(DEVELOPER_EMAIL))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, body)
+        }
+        val chooser = Intent.createChooser(intent, "Send Email")
+        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(chooser)
+    } catch (e: Exception) {
+        copyToClipboard(context, "Support Email", "$DEVELOPER_EMAIL\n\n$subject\n\n$body")
         Toast.makeText(
-            context, 
-            "Gmail app is required. Please install Gmail or send feedback to $DEVELOPER_EMAIL", 
+            context,
+            "No email app found. Details copied to clipboard for $DEVELOPER_EMAIL",
             Toast.LENGTH_LONG
         ).show()
     }
 }
 
-private fun sendBugReport(context: Context) {
-    val deviceInfo = """
-        Bug Description:
-        [Please describe the issue you encountered]
-        
-        Steps to Reproduce:
-        1. 
-        2. 
-        3. 
-        
-        Expected Behavior:
-        [What did you expect to happen?]
-        
-        Actual Behavior:
-        [What actually happened?]
+private fun sendFeatureRequest(context: Context, category: String, featureText: String) {
+    val subject = "[Feature Request] K-PDF ($category)"
+    val emailBody = """
+        Feature Idea ($category):
+        $featureText
         
         ---
-        Device: ${Build.MANUFACTURER} ${Build.MODEL}
-        Android: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})
-        App Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})
+        Diagnostics:
+        ${getDiagnosticInfo()}
     """.trimIndent()
-    
-    try {
-        // Restrict to Gmail only
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "message/rfc822"
-            setPackage("com.google.android.gm") // Gmail package
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(DEVELOPER_EMAIL))
-            putExtra(Intent.EXTRA_SUBJECT, "[Bug Report] PDF Toolkit")
-            putExtra(Intent.EXTRA_TEXT, deviceInfo)
-        }
+    sendEmailUniversal(context, subject, emailBody)
+}
+
+private fun sendBugReport(context: Context, bugDescription: String) {
+    val subject = "[Bug Report] K-PDF v${BuildConfig.VERSION_NAME}"
+    val emailBody = """
+        Bug Description & Steps:
+        ${if (bugDescription.isBlank()) "[Please describe what happened]" else bugDescription}
         
-        context.startActivity(intent)
-    } catch (e: Exception) {
-        // Gmail not installed
-        Toast.makeText(
-            context, 
-            "Gmail app is required. Please install Gmail or send bug reports to $DEVELOPER_EMAIL", 
-            Toast.LENGTH_LONG
-        ).show()
-    }
+        ---
+        Diagnostics:
+        ${getDiagnosticInfo()}
+    """.trimIndent()
+    sendEmailUniversal(context, subject, emailBody)
 }
 
 private fun openPlayStore(context: Context) {
@@ -1016,6 +1382,10 @@ private fun openPlayStore(context: Context) {
 }
 
 private fun openPrivacyPolicy(context: Context) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karna14314.github.io/Pdf_Tools/"))
-    context.startActivity(intent)
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL))
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        Toast.makeText(context, "Unable to open Privacy Policy", Toast.LENGTH_SHORT).show()
+    }
 }

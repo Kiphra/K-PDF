@@ -294,8 +294,8 @@
     <string name="settings_version">Version</string>
     <string name="settings_privacy_policy">Privacy Policy</string>
     <string name="settings_privacy_policy_subtitle">View our privacy policy</string>
-    <string name="settings_licenses">Open Source Licenses</string>
-    <string name="settings_licenses_subtitle">View third-party licenses</string>
+    <string name="settings_licenses">Third-Party Notices</string>
+    <string name="settings_licenses_subtitle">Software attributions &amp; legal notices</string>
     <string name="settings_clear_cache">Clear Cache?</string>
     <string name="settings_clear_cache_message">This will delete temporary files and cached data. Your saved PDFs will not be affected.</string>
     <string name="settings_cache_cleared">Cache cleared successfully</string>
@@ -605,7 +605,7 @@ Saved to: %1$s</string>
     <string name="extract_no_pdf_subtitle">Select a PDF to extract text content</string>
     <string name="pagenum_title">Page Numbers</string>
     <string name="pagenum_no_pdf_subtitle">Select a PDF to add page numbers</string>
-    <string name="licenses_title">Open Source Licenses</string>
+    <string name="licenses_title">Third-Party Notices</string>
     <string name="cd_open_link">Open link</string>
 
     <!-- Pass 2 additions -->
