@@ -187,14 +187,14 @@ jobs:
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pdftoolkit-aab-v${{ env.APP_VERSION_NAME }}
+          name: kpdf-aab-v${{ env.APP_VERSION_NAME }}
           path: app/build/outputs/bundle/playstoreRelease/app-playstore-release.aab
           retention-days: 30
 
       - name: Upload native debug symbols artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pdftoolkit-native-symbols-v${{ env.APP_VERSION_NAME }}
+          name: kpdf-native-symbols-v${{ env.APP_VERSION_NAME }}
           path: app/build/outputs/native-debug-symbols/playstoreRelease/native-debug-symbols.zip
           retention-days: 30
           if-no-files-found: warn
@@ -202,14 +202,14 @@ jobs:
       - name: Upload PlayStore APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pdftoolkit-playstore-apk-v${{ env.APP_VERSION_NAME }}
+          name: kpdf-playstore-apk-v${{ env.APP_VERSION_NAME }}
           path: app/build/outputs/apk/playstore/release/*.apk
           retention-days: 30
 
       - name: Upload OpenSource APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pdftoolkit-opensource-apk-v${{ env.APP_VERSION_NAME }}
+          name: kpdf-opensource-apk-v${{ env.APP_VERSION_NAME }}
           path: app/build/outputs/apk/opensource/release/*.apk
           retention-days: 30
 
@@ -222,7 +222,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: play-store-key.json
-          packageName: com.yourname.pdftoolkit
+          packageName: com.kiphra.kpdf
           releaseFiles: app/build/outputs/bundle/playstoreRelease/*.aab
           tracks: internal
           status: completed
@@ -244,7 +244,7 @@ jobs:
           
           # Create multipart form data request
           RESPONSE=$(curl -X POST \
-            "https://developer-api.indusappstore.com/devtools/aab/upgrade/com.yourname.pdftoolkit" \
+            "https://developer-api.indusappstore.com/devtools/aab/upgrade/com.kiphra.kpdf" \
             -H "Authorization: ${{ secrets.INDUS_APP_STORE_KEY }}" \
             -F "file=@${AAB_FILE}" \
             -F "file=@${KEYSTORE_FILE}" \
@@ -329,9 +329,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.APP_VERSION_NAME }}
-          name: "PDFToolkit v${{ env.APP_VERSION_NAME }}"
+          name: "K-PDF v${{ env.APP_VERSION_NAME }}"
           body: |
-            ## PDF Toolkit v${{ env.APP_VERSION_NAME }} (Build ${{ env.APP_VERSION_CODE }})
+            ## K-PDF v${{ env.APP_VERSION_NAME }} (Build ${{ env.APP_VERSION_CODE }})
             
             ### What's New
             ${{ steps.generate-notes.outputs.release_notes }}
@@ -382,8 +382,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Detail | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| **App** | PDF Toolkit |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Package** | com.yourname.pdftoolkit |" >> $GITHUB_STEP_SUMMARY
+          echo "| **App** | K-PDF: PDF Editor & Tools |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Package** | com.kiphra.kpdf |" >> $GITHUB_STEP_SUMMARY
           echo "| **Track** | Internal Testing |" >> $GITHUB_STEP_SUMMARY
           echo "| **Version Name** | ${{ env.APP_VERSION_NAME }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Version Code** | ${{ env.APP_VERSION_CODE }} |" >> $GITHUB_STEP_SUMMARY

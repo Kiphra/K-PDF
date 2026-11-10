@@ -1,207 +1,112 @@
 <p align="center">
-  <img src="store_assets/app_icon_512.png" width="120" height="120" alt="PDF Toolkit">
+  <img src="docs/assets/kpdf_orbit_logo.png" width="128" height="128" alt="K-PDF Logo">
 </p>
 
-<h1 align="center">PDF Toolkit</h1>
+<h1 align="center">K-PDF: PDF Editor & Tools</h1>
 
 <p align="center">
-  <strong>A privacy-first, offline PDF utility for Android</strong>
+  <strong>A high-performance, offline-first PDF editing, conversion, and manipulation powerhouse for Android.</strong>
 </p>
 
 <p align="center">
-  <a href="https://f-droid.org/en/packages/com.yourname.pdftoolkit/">
-    <img src="https://img.shields.io/badge/F--Droid-Download-blue?logo=f-droid" alt="F-Droid">
+  <a href="https://kiphra.github.io/K-PDF/">
+    <img src="https://img.shields.io/badge/Privacy%20Policy-Live-brightgreen" alt="Privacy Policy">
   </a>
-  <a href="https://play.google.com/store/apps/details?id=com.yourname.pdftoolkit">
-    <img src="https://img.shields.io/badge/Play%20Store-Download-green?logo=googleplay" alt="Play Store">
+  <a href="https://play.google.com/store/apps/details?id=com.kiphra.kpdf">
+    <img src="https://img.shields.io/badge/Google%20Play-Download-green?logo=googleplay" alt="Play Store">
   </a>
-  <a href="LICENSE">
-    <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
+  <a href="https://github.com/Kiphra/K-PDF/releases">
+    <img src="https://img.shields.io/github/v/release/Kiphra/K-PDF?include_prereleases" alt="Latest Release">
   </a>
-  <a href="https://github.com/Karna14314/Pdf_Tools/stargazers">
-    <img src="https://img.shields.io/github/stars/Karna14314/Pdf_Tools?style=flat&color=yellow" alt="GitHub Stars">
-  </a>
-  <a href="https://github.com/Karna14314/Pdf_Tools/forks">
-    <img src="https://img.shields.io/github/forks/Karna14314/Pdf_Tools?style=flat&color=blue" alt="GitHub Forks">
-  </a>
-  <a href="https://github.com/Karna14314/Pdf_Tools/watchers">
-    <img src="https://img.shields.io/github/watchers/Karna14314/Pdf_Tools?style=flat&color=green" alt="GitHub Watchers">
-  </a>
-  <a href="https://github.com/Karna14314/Pdf_Tools/issues">
-    <img src="https://img.shields.io/github/issues/Karna14314/Pdf_Tools?style=flat&color=red" alt="GitHub Issues">
-  </a>
-  <a href="https://github.com/Karna14314/Pdf_Tools/releases">
-    <img src="https://img.shields.io/github/v/release/Karna14314/Pdf_Tools?include_prereleases" alt="Latest Release">
-  </a>
-  <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android" alt="Platform">
-  <img src="https://img.shields.io/github/last-commit/Karna14314/Pdf_Tools?style=flat&color=orange" alt="Last Commit">
+  <img src="https://img.shields.io/badge/Platform-Android%208.0+-3DDC84?logo=android" alt="Platform">
+  <img src="https://img.shields.io/badge/License-Third--Party%20Notices-blue" alt="License">
 </p>
 
 ---
 
-## 📱 Get it on Android
+## 🔒 100% On-Device & Privacy-First
 
-<p align="center">
-  <a href="https://f-droid.org/en/packages/com.yourname.pdftoolkit/">
-    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80" alt="Get it on F-Droid">
-  </a>
-  <a href="https://play.google.com/store/apps/details?id=com.yourname.pdftoolkit">
-    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="80" alt="Get it on Google Play">
-  </a>
-</p>
+Your documents are among the most sensitive files on your device. **K-PDF** is built with zero cloud dependencies:
+- **Offline Processing:** All document operations (merging, splitting, compressing, converting, signing, OCR scanning) execute entirely within your device's local sandbox.
+- **Zero Cloud Storage:** Your files never touch external servers or third-party cloud storage.
+- **Complete Confidentiality:** No document telemetry, no contents inspection, and no tracking of file names or contents.
 
-### 📥 F-Droid Installation & Benefits
-PDF Toolkit is published on **F-Droid**, the repository of free and open-source Android software:
-- **100% Free & Open Source**: Built using the `fdroid` build flavor with 0 proprietary dependencies or trackers.
-- **Offline Tesseract OCR Engine**: Performs Optical Character Recognition completely on-device without Google Play Services or network connections.
-- **Reproducible & Verified**: Standard F-Droid automated builds compiled from source.
-
-**To Install via F-Droid:**
-1. Download the [F-Droid Client App](https://f-droid.org/).
-2. Search for `PDF Toolkit` or open [com.yourname.pdftoolkit on F-Droid](https://f-droid.org/en/packages/com.yourname.pdftoolkit/).
-3. Tap **Install** for automatic updates and verified security.
-
-> Offline · Privacy-first · No account required
+Read the official [Privacy Policy](https://kiphra.github.io/K-PDF/) for complete disclosures.
 
 ---
+
 ## ✨ Features
 
-### 📄 PDF Management
-- **Merge PDF & Images** — Combine multiple PDF files and images (JPG, PNG, WebP) into a single document with File & Page preview modes
-- **Split PDF** — Split into multiple files or specific page ranges
-- **Compress PDF** — Reduce file size while maintaining quality
-- **Reorder Pages** — Visual drag-and-drop page reordering
-- **Rotate Pages** — Rotate specific pages or entire documents
-- **Extract Pages** — Extract specific pages to create new PDFs
-- **Delete Pages** — Remove unwanted pages
+### 📄 Document Operations & Management
+- **Merge PDF & Images** — Combine multiple PDFs and images (JPG, PNG, WebP) into a single unified document with visual reordering.
+- **Split PDF** — Split documents into individual pages or custom page ranges.
+- **Compress PDF** — Granular compression controls (Low, Medium, High, Extreme) to reduce file sizes instantly.
+- **Reorder & Rotate** — Drag-and-drop page sequencing with 90°/180° rotation options.
+- **Extract & Delete** — Extract specific pages into a new document or remove unwanted pages.
 
 ### 🔄 Conversion Tools
-- **Images to PDF** — Create PDFs from gallery images
-- **PDF to Images** — Convert PDF pages to high-quality images (JPG/PNG/WebP)
-- **HTML to PDF** — Direct webpage to PDF conversion
-- **Scan to PDF** — Camera-based document scanning with automatic edge detection
+- **Images to PDF** — Convert gallery photos or scans into professional multi-page PDF documents.
+- **PDF to Images** — Export PDF pages as high-resolution JPG or PNG images.
+- **Scan to PDF** — Real-time camera document scanning with 4-point perspective warp and edge detection.
+- **OCR Text Extraction** — Extract selectable, searchable text directly from scanned images and documents offline.
 
-### ✏️ Editing & Annotation
-- **Annotate** — Highlight, draw, and markup PDFs with custom Canvas layering
-- **Sign PDF** — Add digital signatures to documents
-- **Fill Forms** — Complete PDF forms on the go
-- **Flatten PDF** — Make forms and annotations permanent
+### ✏️ Editing, Signing & Imposition
+- **Digital Signatures** — Draw and place reusable digital signatures on any PDF page.
+- **Watermarking** — Apply customizable text or logo watermarks with transparency and angle controls.
+- **Fill & Flatten Forms** — Complete interactive PDF form fields and flatten forms to finalize edits.
+- **Print Imposition** — Advanced booklet layout formatting (N-Up, Cut & Stack, 2-Up, 4-Up) with LTR/RTL support.
 
-### 🔒 Privacy & Security
-- **Lock PDF** — Password-protect your files
-- **Unlock PDF** — Remove passwords (with valid password)
-- **Watermark** — Add text or image watermarks
-- **All processing on-device** — No cloud, no servers
-- **No internet permission** — Completely offline capable
-- **No data collection or tracking**
-
-### 🔤 OCR & Text
-- **Extract Text** — Pull text content from PDF pages
-- **ML Kit OCR** — Play Store flavor (on-device, smaller APK)
-- **Tesseract OCR** — F-Droid and opensource flavors (100% open source)
-
-### 🖼️ Image Tools
-- **Compress Images** — Optimize file sizes
-- **Resize Images** — Change dimensions
-- **Format Conversion** — JPG, PNG, WebP
-- **Remove Metadata** — Strip EXIF data for privacy
+### 🔐 Security & Vault
+- **Lock PDF** — Encrypt and password-protect documents with standard 128-bit/256-bit encryption.
+- **Unlock PDF** — Decrypt and remove passwords from protected PDFs (with valid authorization).
+- **Metadata Editor** — View, edit, or strip PDF metadata (Title, Author, Subject, Keywords).
 
 ---
 
 ## 🏗️ Build Flavors
 
-| Flavor | OCR Engine | Ads | Firebase | Distribution |
-|--------|-----------|-----|----------|--------------|
-| `playstore` | ML Kit | No | No | Google Play |
-| `fdroid` | Tesseract | No | No | F-Droid |
-| `opensource` | Tesseract | No | No | GitHub Releases |
-
-All flavors are **privacy-first** with no ads, no analytics, and no proprietary dependencies except ML Kit in the Play Store flavor.
+| Flavor | Target Platform | OCR Engine | Notes |
+|:---|:---|:---|:---|
+| `playstore` | Google Play Store | Google ML Kit | Lightweight OCR, Google In-App Review |
+| `fdroid` | F-Droid | Tesseract OCR | 100% FOSS, zero proprietary libraries |
+| `opensource` | Sideload / Direct APK | Tesseract OCR | Offline-first independent distribution |
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack & Architecture
 
-| Category | Technology |
-|----------|------------|
-| **Language** | Kotlin 100% |
-| **UI Framework** | Jetpack Compose (Material Design 3) |
-| **Architecture** | MVVM + Clean Architecture |
-| **PDF Processing** | PdfBox-Android, Android PdfRenderer |
-| **Annotations** | Custom Canvas + BlendMode layering |
-| **OCR (Play Store)** | Google ML Kit |
-| **OCR (F-Droid / Opensource)** | Tesseract (tesseract4android) |
-| **Camera** | CameraX |
-| **Images** | Coil, Glide, uCrop |
-| **Database** | Room |
-| **Preferences** | DataStore |
-| **Async** | Coroutines & Flow |
-| **Build** | Gradle + KSP |
+- **Language:** Kotlin 100%
+- **UI:** Jetpack Compose with Material 3 obsidian/crimson engineering design system
+- **PDF Engine:** PdfBox-Android & Android `PdfRenderer`
+- **OCR:** Google ML Kit (Play Store) / Tesseract (`tesseract4android`)
+- **Async Concurrency:** Kotlin Coroutines & Flow
+- **Data Persistence:** AndroidX DataStore & Room
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-- Android Studio Hedgehog or newer
-- JDK 17+
-- Android SDK 26+
-
-### Build
+## 🚀 Building from Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/Karna14314/Pdf_Tools.git
-cd Pdf_Tools
+git clone https://github.com/Kiphra/K-PDF.git
+cd K-PDF
 
-# Play Store flavor (ML Kit OCR)
-./gradlew assemblePlaystoreRelease
+# Build Play Store debug APK
+./gradlew :app:assemblePlaystoreDebug
 
-# F-Droid flavor (Tesseract OCR, no proprietary deps)
-./gradlew assembleFdroidRelease
-
-# Opensource flavor (fully FOSS)
-./gradlew assembleOpensourceRelease
+# Build Play Store release bundle (AAB)
+./gradlew :app:bundlePlaystoreRelease
 ```
 
 ---
 
-## 📦 Download
+## 📬 Contact & Support
 
-| Platform | Link | Notes |
-|----------|------|-------|
-| F-Droid | [Get on F-Droid](https://f-droid.org/en/packages/com.yourname.pdftoolkit/) | 100% FOSS, auto-updates |
-| Google Play | [Install](https://play.google.com/store/apps/details?id=com.yourname.pdftoolkit) | Play Store variant, auto-updates |
-| GitHub Releases | [Download APK](https://github.com/Karna14314/Pdf_Tools/releases) | Opensource flavor, manual install |
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request against `master`
-
-**Important:** The F-Droid and opensource flavors must remain free of proprietary dependencies. Any new dependencies must be compatible with the F-Droid inclusion policy.
-
-See [open issues](https://github.com/Karna14314/Pdf_Tools/issues) for feature requests and bug reports.
+- **Publisher:** Kiphra
+- **Support Email:** [kiphraofficial@gmail.com](mailto:kiphraofficial@gmail.com)
+- **Official Privacy Policy:** [https://kiphra.github.io/K-PDF/](https://kiphra.github.io/K-PDF/)
+- **Third-Party Notices:** [https://kiphra.github.io/K-PDF/licenses.html](https://kiphra.github.io/K-PDF/licenses.html)
 
 ---
 
-## 👤 Maintainer
-
-**Narisetti Chaitanya Naidu**  
-GitHub: [@Karna14314](https://github.com/Karna14314)
-
----
-
-## 📄 License
-
-Copyright © 2026 Narisetti Chaitanya Naidu
-
-Licensed under the Apache License, Version 2.0  
-See [LICENSE](LICENSE) for full text.
+&copy; 2026 Kiphra. All rights reserved.
