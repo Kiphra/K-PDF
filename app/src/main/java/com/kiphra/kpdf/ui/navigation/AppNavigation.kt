@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -516,12 +519,20 @@ fun AppNavigation(
             }
         }
     ) { paddingValues ->
+        val layoutDirection = LocalLayoutDirection.current
+        val topPadding = if (showTopBar) paddingValues.calculateTopPadding() else 0.dp
+        val bottomPadding = if (showBottomBar) paddingValues.calculateBottomPadding() else 0.dp
         NavHost(
             navController = navController,
             startDestination = actualStartDestination,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(
+                    top = topPadding,
+                    bottom = bottomPadding,
+                    start = paddingValues.calculateStartPadding(layoutDirection),
+                    end = paddingValues.calculateEndPadding(layoutDirection)
+                )
         ) {
             // Main Tabs
             composable(Screen.Tools.route) {
