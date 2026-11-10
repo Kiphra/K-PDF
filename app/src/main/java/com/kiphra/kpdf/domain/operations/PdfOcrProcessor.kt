@@ -111,7 +111,7 @@ data class ImageOcrOutcome(
 
 /**
  * OCR Processor - Performs Optical Character Recognition on PDF pages.
- * Uses flavor-specific OCR engine (ML Kit for Play Store, Tesseract for F-Droid).
+ * Uses Google ML Kit on-device text recognition engine.
  * Can extract text and make scanned PDFs searchable.
  */
 class PdfOcrProcessor(private val context: Context) {

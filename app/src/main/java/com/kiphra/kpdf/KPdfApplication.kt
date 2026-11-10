@@ -20,6 +20,10 @@ import kotlinx.coroutines.runBlocking
  */
 class KPdfApplication : Application() {
     
+    companion object {
+        private const val TAG = "KPdf"
+    }
+    
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     
     override fun onCreate() {
@@ -35,12 +39,12 @@ class KPdfApplication : Application() {
         runBlocking {
             val themeMode = ThemeManager.getThemeMode(applicationContext).first()
             ThemeManager.applyTheme(themeMode)
-            Log.d("PdfToolkit", "Theme initialized: $themeMode")
+            Log.d(TAG, "Theme initialized: $themeMode")
         }
         
         // Initialize language (uses AppCompatDelegate for per-app locale)
         LanguageManager.initializeLanguage(applicationContext)
-        Log.d("PdfToolkit", "Language initialized: ${LanguageManager.getCurrentLanguage()}")
+        Log.d(TAG, "Language initialized: ${LanguageManager.getCurrentLanguage()}")
         
         // Auto-clean cache on startup (runs in background)
         applicationScope.launch {
@@ -48,13 +52,13 @@ class KPdfApplication : Application() {
                 // Clean old cache files (older than 24 hours)
                 val cleanedBytes = CacheManager.clearOldCache(applicationContext)
                 if (cleanedBytes > 0) {
-                    Log.d("PdfToolkit", "Auto-cleaned ${cleanedBytes / 1024} KB from cache")
+                    Log.d(TAG, "Auto-cleaned ${cleanedBytes / 1024} KB from cache")
                 }
                 
                 // Also clean PDF operation temp files
                 CacheManager.clearPdfOperationsCache(applicationContext)
             } catch (e: Exception) {
-                Log.e("PdfToolkit", "Cache cleanup failed", e)
+                Log.e(TAG, "Cache cleanup failed", e)
             }
         }
     }

@@ -8,14 +8,14 @@
 
 | Field | Value |
 |---|---|
-| Package ID | `com.yourname.pdftoolkit` |
-| App Name | PDF Toolkit (to be rebranded → K-PDF) |
-| Repo | https://github.com/Karna14314/Pdf_Tools |
+| Package ID | `com.kiphra.kpdf` |
+| App Name | K-PDF: PDF Editor & Tools |
+| Repo | https://github.com/Kiphra/K-PDF |
 | License | Apache 2.0 |
-| Min SDK | 24 (Android 7.0) |
+| Min SDK | 26 (Android 8.0) |
 | Target/Compile SDK | 36 |
-| Current Version | 1.3.225 (code 225) |
-| Author | Chaitanya Naidu (Kiphra brand target) |
+| Current Version | 1.4.0 (code 226) |
+| Author | Kiphra |
 
 ---
 
@@ -30,7 +30,7 @@ app/
     opensource/     ← FOSS; no ads; Tesseract OCR
   build.gradle.kts  ← Kotlin DSL, reads gradle.properties for version
 gradle.properties   ← APP_VERSION_CODE + APP_VERSION_NAME (F-Droid source of truth)
-metadata/com.yourname.pdftoolkit.yml  ← F-Droid metadata (in-repo copy)
+metadata/com.kiphra.kpdf.yml  ← F-Droid metadata (in-repo copy)
 ```
 
 **Architectural pattern:** Single-Activity + Jetpack Compose + MVVM.  
@@ -159,7 +159,7 @@ Merge, Split, Compress, Convert (Images→PDF), PdfToImage, Reorder, Rotate, Org
 
 ## 9. F-Droid & CI Readiness
 
-- `UpdateCheckData` in `com.yourname.pdftoolkit.yml` correctly reads `APP_VERSION_CODE` and `APP_VERSION_NAME` from `gradle.properties` ✅
+- `UpdateCheckData` in `com.kiphra.kpdf.yml` correctly reads `APP_VERSION_CODE` and `APP_VERSION_NAME` from `gradle.properties` ✅
 - `AutoUpdateMode: Version` + `UpdateCheckMode: Tags` configured ✅
 - Build entry uses `gradle: [fdroid]` and `gradleprops` ✅
 - **Gap**: After package rename, the metadata filename must be updated to match new package ID.

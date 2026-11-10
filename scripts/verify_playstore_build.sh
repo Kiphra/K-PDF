@@ -16,11 +16,11 @@ fi
 
 echo ""
 echo "Building PlayStore Release AAB..."
-./gradlew bundlePlaystoreRelease --stacktrace
+./gradlew bundleRelease --stacktrace
 
 echo ""
 echo "Verifying AAB exists..."
-AAB_PATH="app/build/outputs/bundle/playstoreRelease/app-playstore-release.aab"
+AAB_PATH="app/build/outputs/bundle/release/app-release.aab"
 if [ ! -f "$AAB_PATH" ]; then
     echo "ERROR: AAB not found at $AAB_PATH"
     exit 1
@@ -47,11 +47,11 @@ fi
 
 echo ""
 echo "Building PlayStore Release APK for testing..."
-./gradlew assemblePlaystoreRelease --stacktrace
+./gradlew assembleRelease --stacktrace
 
 echo ""
 echo "Verifying APK exists..."
-APK_PATH="app/build/outputs/apk/playstore/release/"
+APK_PATH="app/build/outputs/apk/release/"
 if [ -d "$APK_PATH" ] && [ "$(ls -A $APK_PATH/*.apk 2>/dev/null)" ]; then
     echo "✓ APK(s) found in $APK_PATH"
     ls -lh $APK_PATH/*.apk

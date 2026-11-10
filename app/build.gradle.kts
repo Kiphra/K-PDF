@@ -31,6 +31,12 @@ android {
         // Keep resources only for supported locales (strips untranslated
         // resources bundled by libraries like AppCompat/Play Services)
         resConfigs("en", "ar", "de", "es", "fr", "hi", "id", "ja", "ko", "pt-rBR", "ru", "tk", "tr", "uz", "zh")
+
+        // Play Store build features
+        buildConfigField("boolean", "HAS_OCR", "true")
+        buildConfigField("boolean", "USE_MLKIT_OCR", "true")
+        buildConfigField("boolean", "HAS_NETWORK_URL_TO_PDF", "true")
+        buildConfigField("boolean", "HAS_MLKIT_SCANNER", "true")
     }
 
     signingConfigs {
@@ -81,42 +87,6 @@ android {
                     keyPassword = properties["keyPassword"] as String
                 }
             }
-        }
-    }
-
-    flavorDimensions += "store"
-    productFlavors {
-        create("playstore") {
-            dimension = "store"
-            // Play Store and Indus App Store flavor
-            // Uses ML Kit for OCR (proprietary but smaller)
-            buildConfigField("boolean", "HAS_OCR", "true")
-            buildConfigField("boolean", "USE_MLKIT_OCR", "true")
-            buildConfigField("boolean", "HAS_NETWORK_URL_TO_PDF", "true")
-            buildConfigField("boolean", "HAS_MLKIT_SCANNER", "true")
-        }
-        
-        create("fdroid") {
-            dimension = "store"
-            // F-Droid flavor with only open source dependencies
-            // Uses Tesseract for OCR (open source but larger APK)
-            buildConfigField("boolean", "HAS_OCR", "true")
-            buildConfigField("boolean", "USE_MLKIT_OCR", "false")
-            buildConfigField("boolean", "HAS_NETWORK_URL_TO_PDF", "false")
-            buildConfigField("boolean", "HAS_MLKIT_SCANNER", "false")
-        }
-        
-        create("opensource") {
-            dimension = "store"
-            // Open source flavor - no ads, no Firebase, no Play Services
-            // Uses Tesseract for OCR (fully open source)
-            buildConfigField("boolean", "HAS_OCR", "true")
-            buildConfigField("boolean", "USE_MLKIT_OCR", "false")
-            buildConfigField("boolean", "HAS_ADS", "false")
-            buildConfigField("boolean", "HAS_FIREBASE", "false")
-            buildConfigField("boolean", "HAS_PLAY_SERVICES", "false")
-            buildConfigField("boolean", "HAS_NETWORK_URL_TO_PDF", "false")
-            buildConfigField("boolean", "HAS_MLKIT_SCANNER", "false")
         }
     }
 
@@ -219,14 +189,13 @@ android {
         }
     }
     
-    // Custom APK naming with app name, version and flavor
+    // Custom APK naming with app name and version
     applicationVariants.all {
         val variant = this
         variant.outputs.all {
             val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-            if (variant.buildType.name == "release" && variant.flavorName != "fdroid") {
-                val flavorName = variant.flavorName
-                outputImpl.outputFileName = "kpdf-${flavorName}-v${variant.versionName}.apk"
+            if (variant.buildType.name == "release") {
+                outputImpl.outputFileName = "kpdf-v${variant.versionName}.apk"
             }
         }
     }
@@ -282,25 +251,10 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
     
-    // OCR Libraries - flavor-specific
-    // Play Store: ML Kit (proprietary, smaller APK + 40MB runtime download)
-    "playstoreImplementation"("com.google.mlkit:text-recognition:16.0.1")
-    "playstoreImplementation"("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0")
-    "playstoreImplementation"("com.google.android.play:review:2.0.1")
-
-    // F-Droid: Tesseract (open source, larger APK but no runtime downloads)
-    "fdroidImplementation"("cz.adaptech.tesseract4android:tesseract4android:4.9.0")
-
-    // F-Droid: MuPDF for PDF viewer (fully open source, high performance)
-    // NOTE: MuPDF requires custom repository setup. Commented out until configured.
-    // "fdroidImplementation"("com.artifex.mupdf:fitz:1.24.9")
-
-    // Open Source: Tesseract (same as F-Droid, fully open source)
-    "opensourceImplementation"("cz.adaptech.tesseract4android:tesseract4android:4.9.0")
-
-    // Open Source: MuPDF for PDF viewer
-    // NOTE: MuPDF requires custom repository setup. Commented out until configured.
-    // "opensourceImplementation"("com.artifex.mupdf:fitz:1.24.9")
+    // Play Store: ML Kit OCR, Document Scanner & In-App Review
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+    implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0")
+    implementation("com.google.android.play:review:2.0.1")
     
     // Coil for image loading (Apache 2.0) - lightweight (~2MB)
     implementation("io.coil-kt:coil-compose:2.5.0")

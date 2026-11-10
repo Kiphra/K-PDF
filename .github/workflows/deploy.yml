@@ -123,7 +123,7 @@ jobs:
         run: chmod +x gradlew
 
       # ════════════════════════════════════════════════════════════════════════════════
-      # 8. Build Release AAB and APKs (PlayStore + OpenSource)
+      # 8. Build Release AAB and APK
       # ════════════════════════════════════════════════════════════════════════════════
       - name: Build Release AAB
         env:
@@ -136,9 +136,9 @@ jobs:
           CI: true
         run: |
           echo "Building AAB — versionCode=${{ env.APP_VERSION_CODE }}, versionName=${{ env.APP_VERSION_NAME }}"
-          ./gradlew bundlePlaystoreRelease
+          ./gradlew bundleRelease
 
-      - name: Build Play Store APK
+      - name: Build Release APK
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
@@ -148,21 +148,8 @@ jobs:
           APP_VERSION_NAME: ${{ env.APP_VERSION_NAME }}
           CI: true
         run: |
-          echo "Building Play Store APK — versionCode=${{ env.APP_VERSION_CODE }}, versionName=${{ env.APP_VERSION_NAME }}"
-          ./gradlew assemblePlaystoreRelease
-
-      - name: Build Open Source APK
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          ANDROID_KEYSTORE_FILE: keystore.jks
-          APP_VERSION_CODE: ${{ env.APP_VERSION_CODE }}
-          APP_VERSION_NAME: ${{ env.APP_VERSION_NAME }}
-          CI: true
-        run: |
-          echo "Building Open Source APK — versionCode=${{ env.APP_VERSION_CODE }}, versionName=${{ env.APP_VERSION_NAME }}"
-          ./gradlew assembleOpensourceRelease
+          echo "Building Release APK — versionCode=${{ env.APP_VERSION_CODE }}, versionName=${{ env.APP_VERSION_NAME }}"
+          ./gradlew assembleRelease
 
       # ════════════════════════════════════════════════════════════════════════════════
       # 9. Verify Build Outputs
@@ -170,47 +157,36 @@ jobs:
       - name: Verify Build Outputs
         run: |
           echo "=== AAB Files ==="
-          ls -lh app/build/outputs/bundle/playstoreRelease/*.aab
-          echo "=== Play Store APK ==="
-          ls -lh app/build/outputs/apk/playstore/release/*.apk || echo "Play Store APK not found"
-          echo "=== Open Source APK ==="
-          ls -lh app/build/outputs/apk/opensource/release/*.apk || echo "Open Source APK not found"
-          echo "=== F-Droid APK ==="
-          ls -lh app/build/outputs/apk/fdroid/release/*.apk || echo "F-Droid APK not found"
+          ls -lh app/build/outputs/bundle/release/*.aab
+          echo "=== Release APK ==="
+          ls -lh app/build/outputs/apk/release/*.apk || echo "Release APK not found"
           echo "=== Version ==="
           echo "versionCode: ${{ env.APP_VERSION_CODE }}"
           echo "versionName: ${{ env.APP_VERSION_NAME }}"
 
       # ════════════════════════════════════════════════════════════════════════════════
-      # 10. Upload AAB and APKs as build artifacts
+      # 10. Upload AAB and APK as build artifacts
       # ════════════════════════════════════════════════════════════════════════════════
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
         with:
           name: kpdf-aab-v${{ env.APP_VERSION_NAME }}
-          path: app/build/outputs/bundle/playstoreRelease/app-playstore-release.aab
+          path: app/build/outputs/bundle/release/app-release.aab
           retention-days: 30
 
       - name: Upload native debug symbols artifact
         uses: actions/upload-artifact@v4
         with:
           name: kpdf-native-symbols-v${{ env.APP_VERSION_NAME }}
-          path: app/build/outputs/native-debug-symbols/playstoreRelease/native-debug-symbols.zip
+          path: app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip
           retention-days: 30
           if-no-files-found: warn
 
-      - name: Upload PlayStore APK artifact
+      - name: Upload Release APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: kpdf-playstore-apk-v${{ env.APP_VERSION_NAME }}
-          path: app/build/outputs/apk/playstore/release/*.apk
-          retention-days: 30
-
-      - name: Upload OpenSource APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: kpdf-opensource-apk-v${{ env.APP_VERSION_NAME }}
-          path: app/build/outputs/apk/opensource/release/*.apk
+          name: kpdf-release-apk-v${{ env.APP_VERSION_NAME }}
+          path: app/build/outputs/apk/release/*.apk
           retention-days: 30
 
       # ════════════════════════════════════════════════════════════════════════════════
@@ -223,7 +199,7 @@ jobs:
         with:
           serviceAccountJson: play-store-key.json
           packageName: com.kiphra.kpdf
-          releaseFiles: app/build/outputs/bundle/playstoreRelease/*.aab
+          releaseFiles: app/build/outputs/bundle/release/*.aab
           tracks: internal
           status: completed
           whatsNewDirectory: distribution/whatsnew
@@ -235,7 +211,7 @@ jobs:
         id: upload-indus-store
         continue-on-error: true
         run: |
-          AAB_FILE=$(ls app/build/outputs/bundle/playstoreRelease/*.aab | head -n 1)
+          AAB_FILE=$(ls app/build/outputs/bundle/release/*.aab | head -n 1)
           KEYSTORE_FILE="keystore.jks"
           
           echo "Uploading to Indus App Store..."
@@ -360,13 +336,11 @@ jobs:
             - Build Number: ${{ github.run_number }}
             
             ### Downloads
-            - **AAB** - Android App Bundle for app stores
-            - **PlayStore APK** - For sideloading with Play Services
-            - **OpenSource APK** - For privacy-conscious users, fully offline
+            - **AAB** - Android App Bundle for Google Play Store
+            - **Release APK** - Release APK
           files: |
-            app/build/outputs/bundle/playstoreRelease/*.aab
-            app/build/outputs/apk/playstore/release/*.apk
-            app/build/outputs/apk/opensource/release/*.apk
+            app/build/outputs/bundle/release/*.aab
+            app/build/outputs/apk/release/*.apk
           draft: false
           prerelease: false
         env:

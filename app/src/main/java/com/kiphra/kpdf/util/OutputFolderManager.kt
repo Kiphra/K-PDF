@@ -141,7 +141,7 @@ object OutputFolderManager {
     
     /**
      * Publish an already-rendered file (e.g. from cache) into the public
-     * Documents/PDF Toolkit folder via MediaStore.
+     * Documents/K-PDF folder via MediaStore.
      * Works under scoped storage (Android 10+) with no storage permission.
      * Returns the MediaStore content URI and final display name, or null.
      */

@@ -4,7 +4,7 @@ ERRORS=0
 WARNINGS=0
 
 echo "========================================="
-echo "PDF Toolkit Static Analysis"
+echo "K-PDF Static Analysis"
 echo "========================================="
 
 # Check 1: Bitmap recycle guard
@@ -85,12 +85,12 @@ grep -rn "System.getenv.*VERSION\|System.getenv.*version" app/src/main --include
     ERRORS=$((ERRORS + 1))
 done
 
-# Check 10: PlayStore references in fdroid/opensource flavors
-echo "Checking flavor isolation..."
-grep -rn "play.google.com\|google.android.gms\|play.core" app/src/fdroid app/src/opensource 2>/dev/null --include="*.kt" | while read line; do
-    echo "  ERROR: Play Store reference in FOSS flavor: $line"
+# Check 10: Package consistency check
+echo "Checking package consistency..."
+if grep -rn "com.yourname" app/src/main --include="*.kt" --include="*.xml" 2>/dev/null | grep -q .; then
+    echo "  ERROR: Legacy package name found in source"
     ERRORS=$((ERRORS + 1))
-done
+fi
 
 echo ""
 echo "========================================="

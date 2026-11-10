@@ -25,7 +25,7 @@ jobs:
           bash scripts/static_analysis.sh
           
       - name: Run Android Lint
-        run: ./gradlew lintFdroidDebug --continue
+        run: ./gradlew lintDebug --continue
         
       - name: Upload lint report
         if: always()
@@ -56,7 +56,7 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle.kts') }}
 
       - name: Run unit tests
-        run: ./gradlew testFdroidDebugUnitTest
+        run: ./gradlew testDebugUnitTest
 
       - name: Upload test results
         if: always()
@@ -86,11 +86,8 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/*.gradle.kts') }}
           
-      - name: Build fdroid debug
-        run: ./gradlew :app:assembleFdroidDebug
-        
-      - name: Build playstore debug
-        run: ./gradlew :app:assemblePlaystoreDebug
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug
 
   crash-free-check:
     name: Crash Pattern Check
@@ -141,20 +138,20 @@ jobs:
       - name: Build PlayStore Release (unsigned)
         run: |
           # Build without signing to verify ProGuard doesn't break anything
-          ./gradlew :app:assemblePlaystoreRelease --continue
+          ./gradlew :app:assembleRelease --continue
         continue-on-error: true
         
       - name: Verify APK Output
         run: |
           echo "Checking for APK output..."
-          ls -lh app/build/outputs/apk/playstore/release/ || echo "No APKs found"
+          ls -lh app/build/outputs/apk/release/ || echo "No APKs found"
           
       - name: Upload PlayStore Release APK
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playstore-release-test-apk
-          path: app/build/outputs/apk/playstore/release/*.apk
+          path: app/build/outputs/apk/release/*.apk
           retention-days: 5
 
   # Instrumented tests - disabled by default as they require emulator

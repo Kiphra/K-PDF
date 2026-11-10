@@ -492,7 +492,7 @@ private fun EngineIdentityCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "K-PDF Toolkit",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
@@ -517,7 +517,7 @@ private fun EngineIdentityCard() {
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 TechnicalTag(text = "ON-DEVICE")
-                TechnicalTag(text = "TESSERACT OCR")
+                TechnicalTag(text = "ML KIT OCR")
                 TechnicalTag(text = "FAST ENGINE")
             }
         }

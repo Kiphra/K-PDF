@@ -1,7 +1,7 @@
 # NOTICE
 
-PDF Toolkit
-Copyright 2024-2025 PDF Toolkit Contributors
+K-PDF: PDF Editor & Tools
+Copyright 2024-2026 Kiphra
 
 This product includes software developed by third parties.
 

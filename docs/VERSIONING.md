@@ -9,12 +9,12 @@ This project uses **static versioning via `gradle.properties`** as the single so
 Version codes and version names are declared strictly in `gradle.properties`:
 
 ```properties
-# F-Droid & Application version properties
-APP_VERSION_CODE=210
-APP_VERSION_NAME=1.3.210
+# Application version properties
+APP_VERSION_CODE=226
+APP_VERSION_NAME=1.4.0
 ```
 
-`app/build.gradle.kts` consumes these properties directly for all build flavors:
+`app/build.gradle.kts` consumes these properties directly:
 ```kotlin
 defaultConfig {
     versionCode = project.property("APP_VERSION_CODE").toString().toInt()
@@ -37,5 +37,4 @@ When publishing a new release:
 ## Distribution Alignment
 
 - **GitHub Actions (`deploy.yml`):** Reads `APP_VERSION_CODE` and `APP_VERSION_NAME` from `gradle.properties` during checkout. No CLI overrides are applied.
-- **F-Droid (`metadata/com.kiphra.kpdf.yml`):** `fdroid checkupdates` parses `gradle.properties` inside Git tags (`UpdateCheckMode: Tags`).
 - **Fastlane (`fastlane/metadata/android/en-US/changelogs/`):** Release notes are supplied in `changelogs/<versionCode>.txt`.

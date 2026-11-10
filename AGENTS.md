@@ -1,81 +1,34 @@
-# Agent Guidelines (AI-ready) — PDF Toolkit
+# Agent Guidelines (AI-ready) — K-PDF: PDF Editor & Tools
 
-This project is an Android app with multiple product flavors (Play Store / F-Droid / Open Source). Use this file as the **source of truth** for how to build, release, and keep F-Droid metadata working in CI.
+This project is a modern Android app dedicated to **Google Play Store**. Use this file as the **source of truth** for how to build, test, and release the application.
 
 ## Repo overview
 
 - **Android app**: `app/`
-- **Flavors**: defined in `app/build.gradle.kts`
-  - `playstore`
-  - `fdroid`
-  - `opensource`
+- **Build Target**: Dedicated Google Play Store release (uses Google ML Kit, GMS Document Scanner, and Google Play In-App Review)
 - **Version source of truth (for releases)**: `gradle.properties`
   - `APP_VERSION_CODE`
   - `APP_VERSION_NAME`
-- **F-Droid metadata (app repo copy)**: `metadata/com.kiphra.kpdf.yml`
-- **F-Droid data repo checkout**: `fdroiddata/` (usually gitignored in this app repo)
-  - Real CI for F-Droid runs against the `fdroiddata` repository’s metadata.
-
-## Flavor intent and constraints
-
-- **`playstore` flavor**
-  - May include Play Services / proprietary SDKs (e.g., ML Kit).
-  - Used for Play Store releases.
-- **`fdroid` flavor**
-  - Must be fully FOSS-compatible (no Google Play Services).
-  - Uses open OCR stack (Tesseract) instead of ML Kit.
-  - CI should avoid referencing Play-only APIs from this flavor.
-- **`opensource` flavor**
-  - FOSS-first build (no ads, no Firebase, no Play Services).
-  - Similar constraints to `fdroid`, but can be distributed outside F-Droid as well.
+- **Fastlane metadata**: `fastlane/metadata/android/en-US/`
 
 ## Building locally (developer machine)
 
 - **Requirements**: JDK 17+, Android SDK installed, Gradle wrapper available.
 - **Common commands**:
-  - `./gradlew :app:assembleFdroidDebug`
-  - `./gradlew :app:assemblePlaystoreDebug`
-  - `./gradlew lintFdroidDebug --continue`
+  - `./gradlew :app:assembleDebug` — Build debug APK
+  - `./gradlew :app:assembleRelease` — Build production APK
+  - `./gradlew :app:bundleRelease` — Build production Android App Bundle (AAB)
+  - `./gradlew :app:lintDebug --continue` — Run Android lint
+  - `./gradlew :app:testDebugUnitTest` — Run unit tests
 
-## Versioning rules (important for F-Droid)
+## Versioning rules
 
-F-Droid’s `checkupdates` cannot extract version info if it is dynamic. This project keeps **static** version values in `gradle.properties`:
+Static version values are maintained in `gradle.properties`:
 
 - `APP_VERSION_CODE=<int>`
 - `APP_VERSION_NAME=<string>`
 
-`app/build.gradle.kts` reads those properties for `versionCode`/`versionName` to remain F-Droid friendly.
-
-## F-Droid metadata + GitLab CI (fdroiddata)
-
-The main F-Droid validation/build pipeline runs in the **`fdroiddata` repo**.
-
-### Required metadata fields for tag-based updates
-
-- `RepoType: git`
-- `Repo: <git url>`
-- `UpdateCheckMode: Tags`
-- `AutoUpdateMode: Version`
-
-### Fix for “Couldn't find any version information” in `checkupdates`
-
-If the upstream uses Gradle properties for versions, set `UpdateCheckData` to read them from `gradle.properties`:
-
-`UpdateCheckData: gradle.properties|APP_VERSION_CODE=(\\d+)|.|APP_VERSION_NAME=(.+)`
-
-This tells `fdroid checkupdates --auto` how to extract version code/name for each tag.
-
-### How F-Droid Auto-Updates Work (No Manual GitLab MRs Needed)
-
-1. **GitHub is the single push target:** All code and version tag updates are pushed strictly to GitHub (`https://github.com/Kiphra/K-PDF.git`). No manual pushes or GitLab Merge Requests on `fdroiddata` are needed for future app releases.
-2. **Tag-based automatic update detection:** F-Droid's scheduled server bot (`checkupdates --auto`) periodically inspects release tags on GitHub (e.g., `v1.3.210`, `v1.4.0`).
-3. **Static property parsing:** F-Droid reads `APP_VERSION_CODE` and `APP_VERSION_NAME` directly from `gradle.properties` in that tag using `UpdateCheckData`.
-4. **Automatic build & release:** F-Droid automatically generates the build recipe, compiles the APK from your GitHub source, and delivers the update to F-Droid client app users.
-
-### CI hygiene: permissions + codequality.json
-
-- `fdroidserver` warns if `config.yml` permissions are not `0600`.
-- Some jobs upload `codequality.json`; ensure it is created (write `[]`) when there are no findings.
+`app/build.gradle.kts` reads these properties for `versionCode`/`versionName`.
 
 ## PDF viewer / annotation rules (don’t regress)
 
@@ -94,14 +47,12 @@ This tells `fdroid checkupdates --auto` how to extract version code/name for eac
 
 ## What an AI agent should do when editing
 
-- Prefer changes that keep the `fdroid` flavor 100% FOSS.
+- Maintain Google Play compliance, GDPR/CCPA privacy standards, and on-device privacy guarantee.
 - When updating versions:
   - Update `APP_VERSION_CODE` / `APP_VERSION_NAME` in `gradle.properties`.
-  - Tag releases in git (e.g., `vX.Y.Z`).
-  - Update F-Droid metadata `CurrentVersion` / `CurrentVersionCode` accordingly.
-- When touching F-Droid metadata:
-  - Ensure `fdroid rewritemeta` produces no diff (canonical formatting).
+  - Add changelog in `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
+  - Update `CHANGELOG.md`.
 
 ---
 
-Last Updated: 2026-05-07
+Last Updated: 2026-11-11

@@ -160,8 +160,8 @@ Categories:
   - Writing
 License: Apache-2.0
 AuthorName: Kiphra
-SourceCode: https://github.com/Karna14314/Pdf_Tools
-IssueTracker: https://github.com/Karna14314/Pdf_Tools/issues
+SourceCode: https://github.com/Kiphra/K-PDF
+IssueTracker: https://github.com/Kiphra/K-PDF/issues
 
 Description: |-
   K-PDF is a comprehensive, offline-first PDF toolkit.

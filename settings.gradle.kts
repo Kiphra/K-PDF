@@ -16,5 +16,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PDF Toolkit"
+rootProject.name = "K-PDF"
 include(":app")

@@ -1,3 +1,5 @@
+| Version Code | Version Name | Date       | Summary |
+|--------------|--------------|------------|---------|
 | 42           | 1.3.15       | 2026-02-19 | v1.3.15 Stable Release - PDF Viewer Zoom/Pan Complete Fix |
 | 43           | 1.3.16       | 2026-02-19 | Fix image tools navigation - each tool now opens with correct operation selected |
 | 44           | 1.3.17       | 2026-02-19 | feat: Add theme management and PDF flatten tool with bug fixes |
@@ -12,5 +14,8 @@
 | 53           | 1.3.27       | 2026-02-20 | Fix: Add history tracking and Open PDF buttons for Scan to PDF, HTML to PDF, OCR, and Fill Forms tools |
 | 54           | 1.3.28       | 2026-02-21 | Fixing Docs |
 | 55           | 1.3.29       | 2026-02-21 | Update app icon and changelogs |
-| ��52           | 1.3.30       | 2026-02-21 | fix: bump versionCode to 52 and versionName to 1.3.27 for Play Store release |
-|            | 1.3.31       | 2026-02-22 | Merge pull request #43 from Karna14314/fix/pdf-ops-reliability-7796039064000772524 |
+| 52           | 1.3.30       | 2026-02-21 | fix: bump versionCode to 52 and versionName to 1.3.27 for Play Store release |
+| 56           | 1.3.31       | 2026-02-22 | Merge pull request #43 from Karna14314/fix/pdf-ops-reliability-7796039064000772524 |
+| 175          | 1.3.175      | 2026-05-07 | F-Droid flavor release with Tesseract OCR |
+| 210          | 1.3.210      | 2026-08-08 | SAF crash hardening and static versioning architecture |
+| 226          | 1.4.0        | 2026-11-11 | Brand transformation to K-PDF, UI overhaul, Print Imposition, Scan to PDF |

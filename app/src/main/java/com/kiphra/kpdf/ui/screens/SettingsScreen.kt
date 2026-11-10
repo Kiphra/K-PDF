@@ -709,7 +709,7 @@ fun SettingsScreen(
                             ) {
                                 Text("Distribution", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(
-                                    "${BuildConfig.FLAVOR.replaceFirstChar { it.uppercase() }} (${BuildConfig.BUILD_TYPE})",
+                                    "Google Play (${BuildConfig.BUILD_TYPE})",
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.SemiBold
                                 )
@@ -755,7 +755,7 @@ fun SettingsScreen(
             dismissButton = {
                 TextButton(
                     onClick = {
-                        val buildInfo = "K-PDF v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE}, Flavor: ${BuildConfig.FLAVOR}, Device: ${Build.MANUFACTURER} ${Build.MODEL}, Android ${Build.VERSION.RELEASE})"
+                        val buildInfo = "K-PDF v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE}, Play Store, Device: ${Build.MANUFACTURER} ${Build.MODEL}, Android ${Build.VERSION.RELEASE})"
                         copyToClipboard(context, "K-PDF Version Info", buildInfo)
                     }
                 ) {
@@ -1296,7 +1296,7 @@ private fun BugReportDialog(
                             }
                         }
                         Text(
-                            text = "${Build.MANUFACTURER} ${Build.MODEL} • Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})\nv${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) • ${BuildConfig.FLAVOR}",
+                            text = "${Build.MANUFACTURER} ${Build.MODEL} • Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})\nv${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) • Google Play",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1335,7 +1335,7 @@ private fun getDiagnosticInfo(): String {
         Device: ${Build.MANUFACTURER} ${Build.MODEL}
         Android: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})
         App Version: ${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})
-        Flavor: ${BuildConfig.FLAVOR} (${BuildConfig.BUILD_TYPE})
+        Distribution: Google Play (${BuildConfig.BUILD_TYPE})
     """.trimIndent()
 }
 

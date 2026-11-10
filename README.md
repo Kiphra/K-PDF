@@ -63,22 +63,14 @@ Read the official [Privacy Policy](https://kiphra.github.io/K-PDF/) for complete
 
 ---
 
-## 🏗️ Build Flavors
-
-| Flavor | Target Platform | OCR Engine | Notes |
-|:---|:---|:---|:---|
-| `playstore` | Google Play Store | Google ML Kit | Lightweight OCR, Google In-App Review |
-| `fdroid` | F-Droid | Tesseract OCR | 100% FOSS, zero proprietary libraries |
-| `opensource` | Sideload / Direct APK | Tesseract OCR | Offline-first independent distribution |
-
----
-
 ## 🛠️ Tech Stack & Architecture
 
+- **Platform Target:** Google Play Store
 - **Language:** Kotlin 100%
 - **UI:** Jetpack Compose with Material 3 obsidian/crimson engineering design system
 - **PDF Engine:** PdfBox-Android & Android `PdfRenderer`
-- **OCR:** Google ML Kit (Play Store) / Tesseract (`tesseract4android`)
+- **OCR:** Google ML Kit Text Recognition (offline & on-device)
+- **Scanning:** Google Mobile Services Document Scanner with edge detection
 - **Async Concurrency:** Kotlin Coroutines & Flow
 - **Data Persistence:** AndroidX DataStore & Room
 
@@ -91,11 +83,11 @@ Read the official [Privacy Policy](https://kiphra.github.io/K-PDF/) for complete
 git clone https://github.com/Kiphra/K-PDF.git
 cd K-PDF
 
-# Build Play Store debug APK
-./gradlew :app:assemblePlaystoreDebug
+# Build debug APK
+./gradlew :app:assembleDebug
 
-# Build Play Store release bundle (AAB)
-./gradlew :app:bundlePlaystoreRelease
+# Build production release bundle (AAB)
+./gradlew :app:bundleRelease
 ```
 
 ---
