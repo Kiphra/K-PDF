@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    namespace = "com.yourname.pdftoolkit"
+    namespace = "com.kiphra.kpdf"
     compileSdk = 36
     ndkVersion = "28.0.12433510"
 
     defaultConfig {
-        applicationId = "com.yourname.pdftoolkit"
+        applicationId = "com.kiphra.kpdf"
         minSdk = 26
         targetSdk = 36
         // Version code and name are read from gradle.properties for F-Droid compatibility
@@ -226,7 +226,7 @@ android {
             val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
             if (variant.buildType.name == "release" && variant.flavorName != "fdroid") {
                 val flavorName = variant.flavorName
-                outputImpl.outputFileName = "pdftoolkit-${flavorName}-v${variant.versionName}.apk"
+                outputImpl.outputFileName = "kpdf-${flavorName}-v${variant.versionName}.apk"
             }
         }
     }
@@ -237,6 +237,9 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.documentfile:documentfile:1.0.1")
+    
+    // WorkManager for robust background processing (Merge, Compress, Batch)
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
     
     // AppCompat for uCrop compatibility
     implementation("androidx.appcompat:appcompat:1.6.1")

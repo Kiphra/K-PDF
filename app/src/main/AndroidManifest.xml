@@ -23,7 +23,7 @@
 
     <application
         android:largeHeap="true"
-        android:name=".PdfToolkitApplication"
+        android:name=".KPdfApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
