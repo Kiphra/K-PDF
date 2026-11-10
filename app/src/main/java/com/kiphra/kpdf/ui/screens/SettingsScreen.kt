@@ -1298,7 +1298,7 @@ private fun BugReportDialog(
 // Helper functions for intents & actions
 
 private const val DEVELOPER_EMAIL = "kiphraofficial@gmail.com"
-private const val PRIVACY_POLICY_URL = "https://karna14314.github.io/Pdf_Tools/"
+private const val PRIVACY_POLICY_URL = "https://kiphra.github.io/K-PDF/"
 
 private fun getDiagnosticInfo(): String {
     return """
